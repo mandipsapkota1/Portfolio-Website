@@ -1,0 +1,130 @@
+---
+---
+<section id="about" class="about">
+  <div class="scan-line" aria-hidden="true"></div>
+  <p class="sec-label">01 — About</p>
+
+  <div class="about-wrap">
+    <div class="about-text reveal">
+      <h2>From first line of code<br>to <span class="yellow">final pixel</span></h2>
+      <p>I write code that works and design interfaces that hold attention. My stack spans
+         HTML, CSS, JavaScript, PHP, and Python — plus Android development in Java and
+         Kotlin when the project calls for it.</p>
+      <p>Wrapping up my BSc. IT at ISMT College in Kathmandu, where coursework in
+         databases, system analysis, and cybersecurity shaped how I think about
+         building things that actually hold up.</p>
+
+      <div class="counters">
+        <div class="counter-item">
+          <strong data-target="3">3+</strong>
+          <span>Years coding</span>
+        </div>
+        <div class="counter-item">
+          <strong data-target="20">20+</strong>
+          <span>Projects built</span>
+        </div>
+        <div class="counter-item">
+          <strong data-target="6">6+</strong>
+          <span>Technologies</span>
+        </div>
+      </div>
+
+      <a href="#contact" class="btn-solid">Get In Touch &rarr;</a>
+    </div>
+
+    <div class="about-cards reveal-group">
+      <div class="acard glass-card border-beam-wrap">
+        <div class="beam" aria-hidden="true"></div>
+        <i class="bx bx-code-alt"></i>
+        <h4>Clean Code</h4>
+        <p>Every project ships with code a teammate could read on day one — structured, documented, and built to last beyond the deadline.</p>
+      </div>
+      <div class="acard glass-card border-beam-wrap">
+        <div class="beam" aria-hidden="true"></div>
+        <i class="bx bx-palette"></i>
+        <h4>Creative Design</h4>
+        <p>Good design isn't decoration. It's the difference between a site visitors trust and one they bounce from in three seconds.</p>
+      </div>
+      <div class="acard glass-card border-beam-wrap">
+        <div class="beam" aria-hidden="true"></div>
+        <i class="bx bx-mobile-alt"></i>
+        <h4>Responsive</h4>
+        <p>Built to work on every screen from the start — not patched for mobile after the fact.</p>
+      </div>
+      <div class="acard glass-card border-beam-wrap">
+        <div class="beam" aria-hidden="true"></div>
+        <i class="bx bx-rocket"></i>
+        <h4>Performance</h4>
+        <p>Speed is a feature. Every project is optimised so the first load feels instant and every interaction stays snappy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.about {
+  background: var(--bg2);
+  padding-top: 9rem; padding-bottom: 9rem;
+  position: relative; overflow: hidden;
+}
+
+/* Diagonal grid texture */
+.about::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(232,255,72,.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,255,72,.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+.about-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem; align-items: start;
+  position: relative;
+}
+
+.about-text h2 {
+  font-family: var(--fhead);
+  font-size: clamp(2.8rem, 3.5vw, 4rem);
+  font-weight: 700; line-height: 1.15; margin-bottom: 2rem;
+}
+.about-text p { color: var(--muted); font-size: 1.55rem; margin-bottom: 1.6rem; }
+
+.counters { display: flex; gap: 3.5rem; margin: 3rem 0; }
+.counter-item strong {
+  display: block; font-family: var(--fhead);
+  font-size: 3.2rem; font-weight: 700;
+  color: var(--yellow); line-height: 1;
+}
+.counter-item span { font-size: 1.25rem; color: var(--muted); }
+
+/* Glass cards grid */
+.about-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem; }
+
+.acard {
+  padding: 2.2rem 2rem;
+  transition: border-color .3s, transform .3s, box-shadow .3s;
+}
+.acard:hover {
+  border-color: rgba(232,255,72,.3);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(232,255,72,.07);
+}
+.acard i    { font-size: 2.6rem; color: var(--yellow); margin-bottom: 1.2rem; display: block; filter: drop-shadow(0 0 6px rgba(232,255,72,.3)); }
+.acard h4   { font-family: var(--fhead); font-size: 1.6rem; font-weight: 600; margin-bottom: .7rem; }
+.acard p    { font-size: 1.35rem; color: var(--muted); line-height: 1.6; }
+
+@media (max-width: 1100px) {
+  .about-wrap { grid-template-columns: 1fr; gap: 4rem; }
+}
+@media (max-width: 900px) {
+  .about-cards { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 500px) {
+  .about-cards { grid-template-columns: 1fr; }
+  .counters { gap: 2rem; }
+}
+</style>

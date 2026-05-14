@@ -1,0 +1,95 @@
+---
+---
+<header class="header" id="header">
+  <a href="#home" class="logo">Mandip<span>.</span></a>
+
+  <nav class="navbar" id="navbar">
+    <a href="#home"      class="nav-link">Home</a>
+    <a href="#about"     class="nav-link">About</a>
+    <a href="#education" class="nav-link">Journey</a>
+    <a href="#skills"    class="nav-link">Skills</a>
+    <a href="#projects"  class="nav-link">Projects</a>
+    <a href="#contact"   class="nav-link">Contact</a>
+  </nav>
+
+  <a href="/cv/Mandip-Sapkota-cv (3).pdf" download="Mandip-Sapkota-CV.pdf" class="btn-cv header-cv">
+    <i class="bx bx-download"></i> CV
+  </a>
+
+  <button class="menu-btn" id="menu-btn" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<style>
+.header {
+  position: fixed; top: 0; left: 0; width: 100%;
+  height: var(--hh); padding: 0 8%;
+  display: flex; align-items: center; justify-content: space-between;
+  z-index: 1000;
+  transition: background .35s, box-shadow .35s, backdrop-filter .35s;
+}
+.header.sticky {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 1px 0 var(--border);
+}
+
+.logo {
+  font-family: var(--fhead); font-size: 2.2rem; font-weight: 800;
+  color: var(--text); letter-spacing: -.02em;
+}
+.logo span { color: var(--yellow); }
+
+.navbar { display: flex; align-items: center; gap: .2rem; }
+
+.nav-link {
+  position: relative;
+  font-size: 1.45rem; font-weight: 500; color: var(--muted);
+  padding: .7rem 1.4rem; border-radius: 50px;
+  transition: color .25s;
+}
+.nav-link::after {
+  content: '';
+  position: absolute; bottom: 4px; left: 50%;
+  transform: translateX(-50%);
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--yellow);
+  opacity: 0; transition: opacity .25s;
+}
+.nav-link:hover { color: var(--text); }
+.nav-link.active { color: var(--text); }
+.nav-link.active::after { opacity: 1; }
+
+.header-cv { font-size: 1.3rem; padding: .7rem 1.4rem; }
+
+.menu-btn {
+  display: none; flex-direction: column; gap: 5px;
+  background: none; cursor: none; padding: .5rem;
+}
+.menu-btn span {
+  display: block; width: 22px; height: 2px;
+  background: var(--text); border-radius: 2px; transition: .3s;
+}
+.menu-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-btn.open span:nth-child(2) { opacity: 0; }
+.menu-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 768px) {
+  .header { padding: 0 6%; }
+  .header-cv { display: none; }
+  .menu-btn { display: flex; }
+  .navbar {
+    position: fixed; top: 0; right: -100%;
+    width: min(75vw, 290px); height: 100vh;
+    flex-direction: column; justify-content: center; gap: 1rem;
+    background: rgba(7,9,15,.98); backdrop-filter: blur(20px);
+    border-left: 1px solid var(--border);
+    transition: right .32s cubic-bezier(.4,0,.2,1);
+    padding: 4rem 3rem;
+  }
+  .navbar.open { right: 0; }
+  .nav-link { font-size: 2rem; padding: .9rem 0; }
+}
+</style>

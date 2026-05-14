@@ -1,0 +1,167 @@
+---
+---
+<section id="skills" class="skills">
+  <div class="scan-line" aria-hidden="true"></div>
+  <p class="sec-label">03 — Skills</p>
+  <h2 class="sec-title">My <span class="yellow">Toolkit</span></h2>
+
+  <div class="skills-wrap">
+
+    <!-- Technical Skills -->
+    <div class="skill-col reveal">
+      <h3>Technical Skills</h3>
+      <div class="skill-bars">
+
+        <div class="skill-row">
+          <div class="skill-meta">
+            <span><i class="bx bxl-html5"></i> HTML5</span>
+            <span>80%</span>
+          </div>
+          <div class="bar"><div class="fill" data-w="80"></div></div>
+        </div>
+
+        <div class="skill-row">
+          <div class="skill-meta">
+            <span><i class="bx bxl-css3"></i> CSS3</span>
+            <span>70%</span>
+          </div>
+          <div class="bar"><div class="fill" data-w="70"></div></div>
+        </div>
+
+        <div class="skill-row">
+          <div class="skill-meta">
+            <span><i class="bx bxl-javascript"></i> JavaScript</span>
+            <span>50%</span>
+          </div>
+          <div class="bar"><div class="fill" data-w="50"></div></div>
+        </div>
+
+        <div class="skill-row">
+          <div class="skill-meta">
+            <span><i class="bx bxl-php"></i> PHP</span>
+            <span>70%</span>
+          </div>
+          <div class="bar"><div class="fill" data-w="70"></div></div>
+        </div>
+
+        <div class="skill-row">
+          <div class="skill-meta">
+            <span><i class="bx bxl-python"></i> Python</span>
+            <span>40%</span>
+          </div>
+          <div class="bar"><div class="fill" data-w="40"></div></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Professional Skills -->
+    <div class="skill-col reveal">
+      <h3>Professional Skills</h3>
+      <div class="skill-bars">
+
+        <div class="skill-row">
+          <div class="skill-meta">
+            <span><i class="bx bx-palette"></i> Web Design</span>
+            <span>75%</span>
+          </div>
+          <div class="bar"><div class="fill" data-w="75"></div></div>
+        </div>
+
+        <div class="skill-row">
+          <div class="skill-meta">
+            <span><i class="bx bx-code-alt"></i> Web Development</span>
+            <span>50%</span>
+          </div>
+          <div class="bar"><div class="fill" data-w="50"></div></div>
+        </div>
+
+        <div class="skill-row">
+          <div class="skill-meta">
+            <span><i class="bx bx-image"></i> Graphic Design</span>
+            <span>45%</span>
+          </div>
+          <div class="bar"><div class="fill" data-w="45"></div></div>
+        </div>
+
+        <div class="skill-row">
+          <div class="skill-meta">
+            <span><i class="bx bxl-android"></i> Android Studio</span>
+            <span>60%</span>
+          </div>
+          <div class="bar"><div class="fill" data-w="60"></div></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Tech badges -->
+  <div class="tech-badges reveal">
+    <span class="badge"><i class="bx bxl-html5"></i> HTML5</span>
+    <span class="badge"><i class="bx bxl-css3"></i> CSS3</span>
+    <span class="badge"><i class="bx bxl-javascript"></i> JavaScript</span>
+    <span class="badge"><i class="bx bxl-php"></i> PHP</span>
+    <span class="badge"><i class="bx bxl-python"></i> Python</span>
+    <span class="badge"><i class="bx bxl-github"></i> GitHub</span>
+    <span class="badge"><i class="bx bxl-android"></i> Android</span>
+    <span class="badge"><i class="bx bx-data"></i> SQL</span>
+  </div>
+</section>
+
+<style>
+.skills {
+  background: var(--bg2);
+  padding-top: 9rem; padding-bottom: 9rem;
+  position: relative;
+}
+
+.skills-wrap {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 5rem; margin-top: 2rem;
+}
+
+.skill-col h3 {
+  font-family: var(--fhead); font-size: 1.8rem; font-weight: 600;
+  color: var(--muted); margin-bottom: 2.4rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.skill-bars { display: flex; flex-direction: column; gap: 2rem; }
+
+.skill-meta {
+  display: flex; justify-content: space-between;
+  font-size: 1.45rem; font-weight: 500; margin-bottom: .8rem;
+}
+.skill-meta i { color: var(--yellow); margin-right: .5rem; }
+.skill-meta > span:last-child { color: var(--muted); font-size: 1.3rem; }
+
+.bar {
+  height: 6px; border-radius: 99px;
+  background: rgba(255,255,255,.06); overflow: visible;
+  position: relative;
+}
+
+/* Tech badges */
+.tech-badges { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 4.5rem; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: .7rem;
+  border: 1px solid var(--border); border-radius: 50px;
+  padding: .75rem 1.6rem; font-size: 1.35rem; color: var(--muted);
+  background: var(--bg3);
+  transition: border-color .25s, color .25s, transform .2s, box-shadow .25s;
+}
+.badge i { color: var(--yellow); font-size: 1.7rem; }
+.badge:hover {
+  border-color: rgba(232,255,72,.35); color: var(--text);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 16px rgba(232,255,72,.1);
+}
+
+@media (max-width: 900px) {
+  .skills-wrap { grid-template-columns: 1fr; }
+}
+</style>

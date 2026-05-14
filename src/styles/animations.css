@@ -1,0 +1,149 @@
+/* ─── ANIMATIONS.CSS ─── */
+/* Scroll reveal, entrance, continuous loops */
+/* Border beam adapted from 21st.dev/r/magicui/border-beam */
+
+/* ─── SCROLL REVEAL ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .65s cubic-bezier(.16,1,.3,1),
+              transform .65s cubic-bezier(.16,1,.3,1);
+}
+.reveal.in { opacity: 1; transform: none; }
+
+/* Staggered children */
+.reveal-group > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .55s cubic-bezier(.16,1,.3,1),
+              transform .55s cubic-bezier(.16,1,.3,1);
+  transition-delay: calc(var(--i, 0) * 0.08s);
+}
+.reveal-group.in > * { opacity: 1; transform: none; }
+
+/* Slide from left / right */
+.reveal-left  { opacity: 0; transform: translateX(-30px); transition: opacity .65s cubic-bezier(.16,1,.3,1), transform .65s cubic-bezier(.16,1,.3,1); }
+.reveal-right { opacity: 0; transform: translateX(30px);  transition: opacity .65s cubic-bezier(.16,1,.3,1), transform .65s cubic-bezier(.16,1,.3,1); }
+.reveal-left.in, .reveal-right.in { opacity: 1; transform: none; }
+
+/* Scale + fade */
+.reveal-scale {
+  opacity: 0; transform: scale(.92);
+  transition: opacity .7s cubic-bezier(.16,1,.3,1),
+              transform .7s cubic-bezier(.16,1,.3,1);
+}
+.reveal-scale.in { opacity: 1; transform: scale(1); }
+
+/* prefers-reduced-motion override */
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-group > *, .reveal-left, .reveal-right, .reveal-scale {
+    opacity: 1; transform: none; transition: none;
+  }
+}
+
+/* ─── HERO ENTRANCE ─── */
+@keyframes heroNameSlide {
+  from { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes heroPhotoIn {
+  from { opacity: 0; transform: scale(.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.hero-name-1 { animation: heroNameSlide .7s cubic-bezier(.16,1,.3,1) .05s both; }
+.hero-name-2 { animation: heroNameSlide .7s cubic-bezier(.16,1,.3,1) .18s both; }
+.hero-role   { animation: heroFadeUp    .6s cubic-bezier(.16,1,.3,1) .32s both; }
+.hero-bio    { animation: heroFadeUp    .6s cubic-bezier(.16,1,.3,1) .44s both; }
+.hero-btns   { animation: heroFadeUp    .6s cubic-bezier(.16,1,.3,1) .54s both; }
+.hero-social { animation: heroFadeUp    .6s cubic-bezier(.16,1,.3,1) .62s both; }
+.hero-photo  { animation: heroPhotoIn   .8s cubic-bezier(.16,1,.3,1) .22s both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-name-1, .hero-name-2, .hero-role, .hero-bio,
+  .hero-btns, .hero-social, .hero-photo { animation: none; }
+}
+
+/* ─── CONTINUOUS LOOPS ─── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: .06; transform: scale(1); }
+  50%       { opacity: .13; transform: scale(1.05); }
+}
+@keyframes gpulse {
+  0%,100% { box-shadow: 0 0 0 3px rgba(34,197,94,.22); }
+  50%     { box-shadow: 0 0 0 8px rgba(34,197,94,.06); }
+}
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50%     { opacity: 0; }
+}
+@keyframes scanLine {
+  from { transform: translateY(-100%); opacity: .04; }
+  to   { transform: translateY(200%);  opacity: 0; }
+}
+
+/* ─── BORDER BEAM (21st.dev adaptation) ─── */
+/* Original: offset-path rect() + offset-distance animation */
+@keyframes border-beam {
+  100% { offset-distance: 100%; }
+}
+
+.border-beam-wrap {
+  position: relative;
+  overflow: hidden;
+}
+.border-beam-wrap .beam {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+}
+.border-beam-wrap .beam::after {
+  content: '';
+  position: absolute;
+  width: 80px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--yellow), transparent);
+  offset-path: rect(0 auto auto 0 round 1.4rem);
+  offset-anchor: 90% 50%;
+  offset-distance: 0%;
+  animation: border-beam 4s infinite linear;
+}
+
+/* ─── TIMELINE DOT RIPPLE ─── */
+@keyframes dotRipple {
+  0%   { box-shadow: 0 0 0 0 rgba(232,255,72,.4); }
+  70%  { box-shadow: 0 0 0 10px rgba(232,255,72,.0); }
+  100% { box-shadow: 0 0 0 0 rgba(232,255,72,.0); }
+}
+.tl-dot.ripple { animation: dotRipple 1s ease-out; }
+
+/* ─── SKILL BAR FILL ─── */
+@keyframes barGrow {
+  from { width: 0; }
+}
+.fill {
+  height: 100%; border-radius: 99px;
+  width: 0;
+  background: linear-gradient(90deg, var(--yellow), var(--yellow2));
+  transition: width 1.1s cubic-bezier(.4,0,.2,1);
+  position: relative;
+}
+.fill::after {
+  content: '';
+  position: absolute; right: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--yellow);
+  box-shadow: 0 0 8px 3px rgba(232,255,72,.6);
+  opacity: 0;
+  transition: opacity .3s .8s;
+}
+.fill.growing::after { opacity: 1; }

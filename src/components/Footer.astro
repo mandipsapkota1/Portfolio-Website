@@ -1,0 +1,124 @@
+---
+---
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+
+      <!-- Brand -->
+      <div class="footer-brand">
+        <a href="#home" class="logo">Mandip<span>.</span></a>
+        <p>Designing and developing from Kathmandu, Nepal — available to work worldwide.</p>
+        <div class="socials">
+          <a href="https://www.facebook.com/mandip.sapkota123" aria-label="Facebook" target="_blank" rel="noopener">
+            <i class="bx bxl-facebook"></i>
+          </a>
+          <a href="https://www.linkedin.com/in/mandip-sapkota-86578937a/" aria-label="LinkedIn" target="_blank" rel="noopener">
+            <i class="bx bxl-linkedin"></i>
+          </a>
+          <a href="https://github.com/mandipsapkota1" aria-label="GitHub" target="_blank" rel="noopener">
+            <i class="bx bxl-github"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Nav -->
+      <div class="footer-nav">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#education">Journey</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div class="footer-contact">
+        <h5>Get In Touch</h5>
+        <ul>
+          <li><i class="bx bx-envelope"></i> mandip.sapkota123@gmail.com</li>
+          <li><i class="bx bx-map"></i> Kathmandu, Nepal</li>
+          <li><i class="bx bxl-github"></i> github.com/mandipsapkota1</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2024 Mandip Sapkota &mdash; All rights reserved.</p>
+      <a href="#home" class="top-btn" aria-label="Back to top">
+        <i class="bx bx-up-arrow-alt"></i>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<style>
+.footer {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 5.5rem 8% 3rem;
+}
+.footer-inner { max-width: 1300px; margin: 0 auto; }
+
+.footer-top {
+  display: grid; grid-template-columns: 1.6fr 1fr 1.4fr;
+  gap: 4rem; padding-bottom: 4.5rem; margin-bottom: 3rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.footer-brand .logo {
+  font-family: var(--fhead); font-size: 2.4rem; font-weight: 800;
+  display: inline-block; margin-bottom: 1.2rem;
+  color: var(--text);
+}
+.footer-brand .logo span { color: var(--yellow); }
+.footer-brand p {
+  font-size: 1.45rem; color: var(--muted);
+  max-width: 28rem; margin-bottom: 2rem; line-height: 1.7;
+}
+
+.footer-nav h5, .footer-contact h5 {
+  font-family: var(--fhead); font-size: 1.4rem; font-weight: 600;
+  color: var(--text); margin-bottom: 1.8rem;
+  text-transform: uppercase; letter-spacing: .06em;
+}
+.footer-nav ul, .footer-contact ul {
+  list-style: none; display: flex; flex-direction: column; gap: 1.1rem;
+}
+.footer-nav ul li a { font-size: 1.4rem; color: var(--muted); transition: color .25s; }
+.footer-nav ul li a:hover { color: var(--yellow); }
+.footer-contact ul li {
+  display: flex; align-items: center; gap: .9rem;
+  font-size: 1.35rem; color: var(--muted);
+}
+.footer-contact ul li i { color: var(--yellow); font-size: 1.65rem; flex-shrink: 0; }
+
+.footer-bottom {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-bottom p { font-size: 1.35rem; color: var(--muted); }
+
+.top-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 1px solid var(--border); color: var(--muted); font-size: 2rem;
+  transition: border-color .25s, color .25s, transform .25s, box-shadow .25s;
+}
+.top-btn:hover {
+  border-color: var(--yellow); color: var(--yellow);
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(232,255,72,.15);
+}
+
+@media (max-width: 1100px) {
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .footer-brand { grid-column: 1 / -1; }
+}
+@media (max-width: 768px) {
+  .footer { padding: 5rem 6% 3rem; }
+  .footer-top { grid-template-columns: 1fr; gap: 3rem; }
+}
+</style>

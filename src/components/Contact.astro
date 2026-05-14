@@ -1,0 +1,145 @@
+---
+---
+<section id="contact" class="contact">
+  <div class="scan-line" aria-hidden="true"></div>
+  <p class="sec-label">05 — Contact</p>
+
+  <div class="contact-wrap">
+    <!-- Info -->
+    <div class="contact-info reveal">
+      <h2>Let's build something<br><span class="yellow">worth showing off</span></h2>
+      <p>Whether you have a full brief or just a rough idea, drop me a message — I'll help you figure out the rest.</p>
+
+      <ul class="info-list">
+        <li><i class="bx bx-envelope"></i> mandip.sapkota123@gmail.com</li>
+        <li><i class="bx bx-phone"></i> +977 9840318084</li>
+        <li><i class="bx bx-map"></i> Kathmandu, Nepal</li>
+      </ul>
+
+      <div class="socials">
+        <a href="https://www.facebook.com/mandip.sapkota123" aria-label="Facebook" target="_blank" rel="noopener">
+          <i class="bx bxl-facebook"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/mandip-sapkota-86578937a/" aria-label="LinkedIn" target="_blank" rel="noopener">
+          <i class="bx bxl-linkedin"></i>
+        </a>
+        <a href="https://github.com/mandipsapkota1" aria-label="GitHub" target="_blank" rel="noopener">
+          <i class="bx bxl-github"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <form class="contact-form glass-card reveal border-beam-wrap" id="contact-form" novalidate>
+      <div class="beam" aria-hidden="true"></div>
+
+      <div class="form-row">
+        <div class="field">
+          <label>Full Name <span>*</span></label>
+          <input type="text" name="from_name" placeholder="Mandip" required />
+        </div>
+        <div class="field">
+          <label>Email Address <span>*</span></label>
+          <input type="email" name="from_email" placeholder="mandip@example.com" required />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label>Phone Number</label>
+          <input type="tel" name="phone" placeholder="+977 98XXXXXXXX" />
+        </div>
+        <div class="field">
+          <label>Subject <span>*</span></label>
+          <input type="text" name="subject" placeholder="Project Inquiry" required />
+        </div>
+      </div>
+
+      <div class="field full">
+        <label>Message <span>*</span></label>
+        <textarea name="message" rows="6" placeholder="Tell me about your project..." required></textarea>
+      </div>
+
+      <div id="form-msg" class="form-msg"></div>
+
+      <button type="submit" class="btn-solid submit-btn" id="submit-btn">
+        <span class="btn-txt">Send Message</span>
+        <i class="bx bx-send"></i>
+      </button>
+    </form>
+  </div>
+</section>
+
+<style>
+.contact { padding-top: 9rem; padding-bottom: 9rem; position: relative; }
+
+.contact-wrap {
+  display: grid; grid-template-columns: 1fr 1.3fr;
+  gap: 6rem; align-items: start;
+}
+
+.contact-info h2 {
+  font-family: var(--fhead);
+  font-size: clamp(2.8rem, 3.5vw, 4rem);
+  font-weight: 700; line-height: 1.15; margin-bottom: 1.6rem;
+}
+.contact-info > p { color: var(--muted); font-size: 1.55rem; margin-bottom: 2.8rem; line-height: 1.7; }
+
+.info-list {
+  list-style: none; display: flex; flex-direction: column;
+  gap: 1.4rem; margin-bottom: 3rem;
+}
+.info-list li {
+  display: flex; align-items: center; gap: 1.2rem;
+  font-size: 1.45rem; color: var(--muted);
+}
+.info-list li i { color: var(--yellow); font-size: 1.9rem; flex-shrink: 0; }
+
+/* Form */
+.contact-form {
+  padding: 3.6rem;
+  display: flex; flex-direction: column; gap: 1.8rem;
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.8rem; }
+.field { display: flex; flex-direction: column; gap: .7rem; }
+
+.field label {
+  font-size: 1.2rem; font-weight: 500; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .06em;
+}
+.field label span { color: var(--yellow); }
+
+.field input, .field textarea {
+  background: rgba(7,9,15,.6);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 1.3rem 1.5rem;
+  font-family: var(--fbody); font-size: 1.5rem; color: var(--text);
+  transition: border-color .3s, box-shadow .3s;
+  resize: none; cursor: text;
+}
+.field input::placeholder, .field textarea::placeholder { color: var(--muted); }
+.field input:focus, .field textarea:focus {
+  border-color: rgba(232,255,72,.4);
+  box-shadow: 0 0 0 3px rgba(232,255,72,.06);
+}
+
+.form-msg {
+  font-size: 1.4rem; border-radius: var(--radius);
+  max-height: 0; overflow: hidden;
+  transition: max-height .3s, padding .3s;
+}
+.form-msg.show { max-height: 70px; padding: 1.1rem 1.4rem; }
+.form-msg.ok  { background: rgba(34,197,94,.1); color: #4ade80; border: 1px solid rgba(34,197,94,.2); }
+.form-msg.err { background: rgba(239,68,68,.1); color: #f87171; border: 1px solid rgba(239,68,68,.2); }
+
+.submit-btn { align-self: flex-start; }
+.submit-btn i { font-size: 1.7rem; }
+
+@media (max-width: 1100px) {
+  .contact-wrap { grid-template-columns: 1fr; gap: 4rem; }
+}
+@media (max-width: 768px) {
+  .form-row { grid-template-columns: 1fr; }
+  .contact-form { padding: 2.4rem; }
+}
+</style>

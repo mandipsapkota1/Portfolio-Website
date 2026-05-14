@@ -1,0 +1,123 @@
+---
+---
+<section id="education" class="education">
+  <div class="scan-line" aria-hidden="true"></div>
+  <p class="sec-label">02 — Journey</p>
+  <h2 class="sec-title">Education &amp; <span class="yellow">Experience</span></h2>
+
+  <div class="timeline-wrap">
+    <!-- Education -->
+    <div class="tl-col">
+      <h3 class="tl-head reveal">
+        <i class="bx bxs-graduation"></i> Education
+      </h3>
+      <div class="timeline">
+        <div class="tl-item reveal-left">
+          <div class="tl-dot"></div>
+          <span class="tl-year">2022 – 2025</span>
+          <h4>BSc. Information Technology</h4>
+          <p class="tl-place">ISMT College</p>
+          <p>Rigorous coursework in programming, databases, and system analysis. Collaborative projects and exposure to emerging technologies.</p>
+        </div>
+        <div class="tl-item reveal-left">
+          <div class="tl-dot"></div>
+          <span class="tl-year">2016 – 2019</span>
+          <h4>High School (+2) — Management</h4>
+          <p class="tl-place">Aroma College</p>
+          <p>Solid foundation in business studies and management principles for advanced academic pursuits.</p>
+        </div>
+        <div class="tl-item reveal-left">
+          <div class="tl-dot"></div>
+          <span class="tl-year">2006 – 2014</span>
+          <h4>School Leaving Certificate</h4>
+          <p class="tl-place">VSSS</p>
+          <p>Comprehensive educational foundation with scholastic achievements and active community engagement.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Experience -->
+    <div class="tl-col">
+      <h3 class="tl-head reveal">
+        <i class="bx bxs-briefcase"></i> Experience
+      </h3>
+      <div class="timeline">
+        <div class="tl-item reveal-right">
+          <div class="tl-dot"></div>
+          <span class="tl-year">2020 – 2023</span>
+          <h4>Application Developer</h4>
+          <p class="tl-place">Android Studio</p>
+          <p>Created and refined mobile apps in Java and Kotlin, collaborating with designers for seamless user experiences.</p>
+        </div>
+        <div class="tl-item reveal-right">
+          <div class="tl-dot"></div>
+          <span class="tl-year">2017 – 2019</span>
+          <h4>Database Administrator</h4>
+          <p class="tl-place">Full-time</p>
+          <p>Managed and optimised databases using SQL, ensuring data integrity and implementing backup strategies.</p>
+        </div>
+        <div class="tl-item reveal-right">
+          <div class="tl-dot"></div>
+          <span class="tl-year">2014 – 2015</span>
+          <h4>Web Developer</h4>
+          <p class="tl-place">Agency</p>
+          <p>Built responsive interfaces for e-commerce, portfolios, and corporate websites with a focus on user experience.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.education { padding-top: 9rem; padding-bottom: 9rem; position: relative; }
+
+.timeline-wrap {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 5rem; margin-top: 1rem;
+}
+
+.tl-head {
+  font-family: var(--fhead); font-size: 1.8rem; font-weight: 600;
+  display: flex; align-items: center; gap: .8rem;
+  color: var(--muted); margin-bottom: 2.8rem;
+}
+.tl-head i { color: var(--yellow); font-size: 2.2rem; }
+
+.timeline {
+  position: relative; padding-left: 2.4rem;
+}
+.timeline::before {
+  content: '';
+  position: absolute; top: 0; left: 0; bottom: 0; width: 1px;
+  background: linear-gradient(to bottom, var(--yellow), rgba(232,255,72,.05));
+}
+
+.tl-item { position: relative; margin-bottom: 3.4rem; }
+
+.tl-dot {
+  position: absolute; top: .5rem; left: -2.4rem;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--yellow); transform: translateX(-4.5px);
+  box-shadow: 0 0 0 4px rgba(232,255,72,.12);
+  transition: box-shadow .3s;
+}
+.tl-item:hover .tl-dot {
+  box-shadow: 0 0 0 8px rgba(232,255,72,.08), 0 0 16px rgba(232,255,72,.2);
+}
+
+.tl-year {
+  font-size: 1.15rem; font-weight: 500; letter-spacing: .07em;
+  color: var(--yellow); text-transform: uppercase;
+  margin-bottom: .4rem; display: block;
+}
+.tl-item h4 {
+  font-family: var(--fhead); font-size: 1.75rem;
+  font-weight: 600; margin-bottom: .3rem;
+}
+.tl-place { font-size: 1.3rem; color: var(--muted); margin-bottom: .6rem; }
+.tl-item > p { font-size: 1.4rem; color: var(--muted); line-height: 1.6; }
+
+@media (max-width: 900px) {
+  .timeline-wrap { grid-template-columns: 1fr; gap: 3rem; }
+}
+</style>

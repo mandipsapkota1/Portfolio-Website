@@ -1,0 +1,61 @@
+---
+import '../styles/global.css';
+import '../styles/animations.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = 'Mandip Sapkota — Developer & Designer',
+  description = 'Web developer & designer crafting seamless digital experiences with HTML, CSS, JavaScript, PHP & Python.'
+} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+
+  <!-- Open Graph -->
+  <meta property="og:title"       content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type"        content="website" />
+
+  <title>{title}</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%2307090f'/><text x='7' y='49' font-family='Georgia,serif' font-size='46' font-weight='700' fill='%23e8ff48'>M</text><circle cx='57' cy='47' r='5' fill='%23e8ff48'/></svg>" />
+  <link rel="alternate icon" href="/favicon.svg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+
+  <!-- Icons -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+</head>
+<body>
+
+  <!-- Scroll progress bar -->
+  <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <slot />
+
+  <!-- Scripts loaded as Astro module scripts -->
+  <script>
+    import '../scripts/cursor.js';
+    import '../scripts/nav.js';
+    import '../scripts/typed.js';
+    import '../scripts/animations.js';
+    import '../scripts/contact.js';
+  </script>
+</body>
+</html>

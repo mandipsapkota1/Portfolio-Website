@@ -1,0 +1,169 @@
+---
+const projects = [
+  {
+    num: '01',
+    name: 'Ready Stack Digital',
+    desc: 'Full-service digital agency website — built to convert visitors into clients with sharp copy, clean layout, and fast load times.',
+    tags: ['Web Design', 'HTML/CSS', 'JS'],
+    github: '#',
+    live: 'https://readystackdigital.com',
+  },
+  {
+    num: '02',
+    name: 'Assignment Helper',
+    desc: 'Full-stack academic support platform with student dashboard, file uploads, admin panel, and email notifications — all secured with auth flows.',
+    tags: ['PHP', 'MySQL', 'Composer'],
+    github: 'https://github.com/mandipsapkota1/Assignment-Helper',
+    live: '#',
+  },
+  {
+    num: '03',
+    name: 'Salary Prediction',
+    desc: 'Machine learning model that forecasts employee compensation from experience, education, and role — trained and evaluated in a Jupyter Notebook.',
+    tags: ['Python', 'ML', 'Jupyter'],
+    github: 'https://github.com/mandipsapkota1/Salary-Prediction',
+    live: '#',
+  },
+  {
+    num: '04',
+    name: 'Secure Login System',
+    desc: 'Cybersecurity-focused authentication system with registration, login, password reset, session management, and SQL-backed user storage.',
+    tags: ['PHP', 'SQL', 'Security'],
+    github: 'https://github.com/mandipsapkota1/Login-Signup',
+    live: '#',
+  },
+  {
+    num: '05',
+    name: 'Suitcase App',
+    desc: 'Native Android application built in Java — a practical mobile utility developed with Android Studio and designed for everyday use.',
+    tags: ['Java', 'Android', 'Studio'],
+    github: 'https://github.com/mandipsapkota1/Suitcase-App',
+    live: '#',
+  },
+  {
+    num: '06',
+    name: 'Attot',
+    desc: 'PHP-powered web project exploring dynamic content management and backend architecture with a clean, maintainable codebase.',
+    tags: ['PHP', 'MySQL', 'Web'],
+    github: 'https://github.com/mandipsapkota1/Attot',
+    live: '#',
+  },
+];
+---
+<section id="projects" class="projects">
+  <div class="scan-line" aria-hidden="true"></div>
+  <p class="sec-label">04 — Projects</p>
+  <h2 class="sec-title">Featured <span class="yellow">Work</span></h2>
+
+  <div class="projects-grid reveal-group">
+    {projects.map(p => (
+      <article class="proj-card glass-card">
+        <!-- Cursor-following glow (21st.dev tilt card technique) -->
+        <div class="proj-glow" aria-hidden="true"></div>
+
+        <header class="proj-header">
+          <span class="proj-num">{p.num}</span>
+          <div class="proj-links">
+            <a href={p.github} aria-label="GitHub" target="_blank" rel="noopener">
+              <i class="bx bxl-github"></i>
+            </a>
+            <a href={p.live} aria-label="Live demo" target="_blank" rel="noopener">
+              <i class="bx bx-link-external"></i>
+            </a>
+          </div>
+        </header>
+
+        <h3 class="proj-name">{p.name}</h3>
+        <p class="proj-desc">{p.desc}</p>
+
+        <footer class="proj-tags">
+          {p.tags.map(tag => (
+            <span class="proj-tag">{tag}</span>
+          ))}
+        </footer>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+.projects { padding-top: 9rem; padding-bottom: 9rem; position: relative; }
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+/* Project card — 21st.dev tilt card with cursor glow */
+.proj-card {
+  position: relative; overflow: hidden;
+  padding: 2.4rem;
+  border-top: 2px solid var(--glass-border);
+  transition: transform .3s cubic-bezier(.4,0,.2,1),
+              box-shadow .3s cubic-bezier(.4,0,.2,1),
+              border-color .3s;
+  transform-style: preserve-3d;
+  cursor: none;
+}
+.proj-card:hover {
+  box-shadow: 0 20px 60px rgba(232,255,72,.1);
+  border-color: var(--yellow);
+}
+
+/* Cursor-following radial glow */
+.proj-glow {
+  position: absolute; inset: 0;
+  background: radial-gradient(
+    circle 140px at var(--mx, 50%) var(--my, 50%),
+    rgba(232,255,72,.06) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  border-radius: inherit;
+  transition: opacity .3s;
+  opacity: 0;
+}
+.proj-card:hover .proj-glow { opacity: 1; }
+
+.proj-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1.6rem;
+}
+.proj-num {
+  font-family: var(--fhead); font-size: 1.2rem; font-weight: 700;
+  color: var(--yellow); letter-spacing: .1em;
+}
+.proj-links { display: flex; gap: .8rem; }
+.proj-links a {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--border); color: var(--muted); font-size: 1.6rem;
+  transition: border-color .25s, color .25s;
+}
+.proj-links a:hover { border-color: var(--yellow); color: var(--yellow); }
+
+.proj-name {
+  font-family: var(--fhead); font-size: 1.9rem; font-weight: 700;
+  margin-bottom: .8rem; line-height: 1.2;
+}
+.proj-desc {
+  font-size: 1.4rem; color: var(--muted); line-height: 1.65;
+  margin-bottom: 2rem; flex: 1;
+}
+
+.proj-tags { display: flex; flex-wrap: wrap; gap: .7rem; }
+.proj-tag {
+  font-size: 1.15rem; font-weight: 500;
+  color: var(--yellow); background: rgba(232,255,72,.08);
+  border: 1px solid rgba(232,255,72,.15);
+  border-radius: 50px; padding: .35rem 1rem;
+}
+
+@media (max-width: 1100px) {
+  .projects-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .projects-grid { grid-template-columns: 1fr; }
+}
+</style>
