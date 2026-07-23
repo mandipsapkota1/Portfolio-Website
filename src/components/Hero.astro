@@ -2,14 +2,16 @@
 ---
 <section id="home" class="home">
 
-  <!-- Background video -->
-  <video
-    class="hero-video"
-    autoplay muted loop playsinline
+  <!-- Background image -->
+  <img
+    class="hero-bg"
+    src="/bg.svg"
+    alt=""
     aria-hidden="true"
-  >
-    <source src="/videos/hero-bg.mp4" type="video/mp4" />
-  </video>
+    loading="eager"
+    decoding="async"
+  />
+  <div class="hero-bg-scrim" aria-hidden="true"></div>
 
   <!-- Animated particle dot grid -->
   <canvas id="hero-canvas" aria-hidden="true"></canvas>
@@ -28,7 +30,7 @@
     <div class="photo-ring hero-name-2" role="img" aria-label="Mandip Sapkota">
       <div class="ring-track" aria-hidden="true"></div>
       <div class="ring-glow"  aria-hidden="true"></div>
-      <img src="/images/home.JPG" alt="Mandip Sapkota" />
+      <img src="/images/DP.jpeg" alt="Mandip Sapkota" />
     </div>
 
     <!-- Name -->
@@ -70,7 +72,7 @@
     <div class="home-btns hero-btns" style="justify-content:center">
       <a href="#contact"  class="btn-solid">Start a Project &rarr;</a>
       <a href="#projects" class="btn-outline">See My Work</a>
-      <a href="/cv/Mandip-Sapkota-cv (3).pdf" download="Mandip-Sapkota-CV.pdf" class="btn-cv">
+      <a href="/cv/Mandip-Sapkota-CV.pdf" download="Mandip-Sapkota-CV.pdf" class="btn-cv">
         <i class="bx bx-download"></i> Download CV
       </a>
     </div>
@@ -161,12 +163,21 @@ if (canvas) {
   text-align: center;
 }
 
-/* Background video */
-.hero-video {
+/* Background image */
+.hero-bg {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
-  opacity: .18;
+  opacity: 1;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+/* Bottom fade so the hero blends into the next section */
+.hero-bg-scrim {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom, transparent 0%, transparent 62%, rgba(7,9,15,.7) 86%, var(--bg) 100%);
   z-index: 0;
   pointer-events: none;
 }
