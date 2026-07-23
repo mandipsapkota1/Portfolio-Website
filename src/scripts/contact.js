@@ -68,7 +68,7 @@ if (form) {
       }
     } catch (err) {
       console.error('Web3Forms error:', err);
-      showMsg('err', '✕ Failed to send. Email me at mandip.sapkota123@gmail.com');
+      showMsg('err', '✕ Failed to send. Email me at info@mandipsapkota.com.np');
     } finally {
       setBusy(false);
     }
