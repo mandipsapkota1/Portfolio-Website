@@ -10,9 +10,29 @@
     <a href="#skills"    class="nav-link">Skills</a>
     <a href="#projects"  class="nav-link">Projects</a>
     <a href="#contact"   class="nav-link">Contact</a>
+
+    <!-- Mobile-only drawer footer -->
+    <div class="nav-foot">
+      <a href="/cv/Mandip-Sapkota-CV.pdf" download="Mandip-Sapkota-CV.pdf" class="btn-solid nav-cv">
+        <i class="bx bx-download"></i> Download CV
+      </a>
+      <div class="nav-socials">
+        <a href="https://www.facebook.com/mandip.sapkota123" aria-label="Facebook" target="_blank" rel="noopener">
+          <i class="bx bxl-facebook"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/mandip-sapkota-86578937a/" aria-label="LinkedIn" target="_blank" rel="noopener">
+          <i class="bx bxl-linkedin"></i>
+        </a>
+        <a href="https://github.com/mandipsapkota1" aria-label="GitHub" target="_blank" rel="noopener">
+          <i class="bx bxl-github"></i>
+        </a>
+      </div>
+    </div>
   </nav>
 
-  <a href="/cv/Mandip-Sapkota-cv (3).pdf" download="Mandip-Sapkota-CV.pdf" class="btn-cv header-cv">
+  <div class="nav-backdrop" id="nav-backdrop" aria-hidden="true"></div>
+
+  <a href="/cv/Mandip-Sapkota-CV.pdf" download="Mandip-Sapkota-CV.pdf" class="btn-cv header-cv">
     <i class="bx bx-download"></i> CV
   </a>
 
@@ -76,20 +96,89 @@
 .menu-btn.open span:nth-child(2) { opacity: 0; }
 .menu-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
+/* Drawer footer is desktop-hidden */
+.nav-foot { display: none; }
+
+/* Backdrop behind the mobile drawer */
+.nav-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(7,9,15,.6);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  opacity: 0; visibility: hidden;
+  transition: opacity .3s ease, visibility .3s;
+  z-index: 998;
+}
+.nav-backdrop.open { opacity: 1; visibility: visible; }
+
 @media (max-width: 768px) {
   .header { padding: 0 6%; }
   .header-cv { display: none; }
-  .menu-btn { display: flex; }
+  .menu-btn { display: flex; z-index: 1001; position: relative; }
+
   .navbar {
-    position: fixed; top: 0; right: -100%;
-    width: min(75vw, 290px); height: 100vh;
-    flex-direction: column; justify-content: center; gap: 1rem;
-    background: rgba(7,9,15,.98); backdrop-filter: blur(20px);
-    border-left: 1px solid var(--border);
-    transition: right .32s cubic-bezier(.4,0,.2,1);
-    padding: 4rem 3rem;
+    position: fixed; top: 0; right: 0;
+    width: min(82vw, 330px);
+    height: 100vh; height: 100dvh;
+    flex-direction: column;
+    align-items: stretch; justify-content: flex-start;
+    gap: 0;
+    background: rgba(7,9,15,.98);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-left: 1px solid var(--glass-border);
+    padding: calc(var(--hh) + 2rem) 2.2rem 2.6rem;
+    /* transform beats `right` — composited, no layout per frame */
+    transform: translateX(100%);
+    transition: transform .34s cubic-bezier(.4,0,.2,1);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    z-index: 999;
   }
-  .navbar.open { right: 0; }
-  .nav-link { font-size: 2rem; padding: .9rem 0; }
+  .navbar.open { transform: translateX(0); }
+
+  /* Left-aligned rows with generous tap targets (min 48px) */
+  .nav-link {
+    font-size: 1.75rem; font-weight: 500;
+    padding: 1.6rem .4rem;
+    border-radius: 0;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    text-align: left;
+  }
+  .nav-link:last-of-type { border-bottom: none; }
+
+  /* Centre dot reads as a stray speck on a left-aligned row — use a left bar */
+  .nav-link::after { display: none; }
+  .nav-link.active {
+    color: var(--yellow);
+    box-shadow: inset 2px 0 0 var(--yellow);
+    padding-left: 1.2rem;
+  }
+
+  /* Footer pinned to the bottom of the drawer */
+  .nav-foot {
+    display: flex; flex-direction: column; gap: 1.8rem;
+    margin-top: auto; padding-top: 2.4rem;
+  }
+  .nav-cv {
+    justify-content: center; width: 100%;
+    font-size: 1.4rem; padding: 1.15rem 1.4rem;
+  }
+  .nav-cv i { font-size: 1.7rem; }
+  .nav-socials {
+    display: flex; justify-content: center; gap: 1.6rem;
+  }
+  .nav-socials a {
+    display: flex; align-items: center; justify-content: center;
+    width: 42px; height: 42px; border-radius: 50%;
+    border: 1px solid var(--glass-border);
+    color: var(--muted); font-size: 2rem;
+    transition: color .25s, border-color .25s;
+  }
+  .nav-socials a:active { color: var(--yellow); border-color: var(--yellow); }
+}
+
+@media (max-width: 380px) {
+  .navbar { width: 88vw; padding-left: 1.8rem; padding-right: 1.8rem; }
+  .nav-link { font-size: 1.6rem; padding: 1.15rem .4rem; }
 }
 </style>

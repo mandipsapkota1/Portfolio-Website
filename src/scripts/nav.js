@@ -30,29 +30,49 @@ window.addEventListener('scroll', updateHeader, { passive: true });
 updateHeader();
 
 if (menuBtn && navbar) {
+  const backdrop = document.getElementById('nav-backdrop');
+
+  function setMenu(open) {
+    navbar.classList.toggle('open', open);
+    menuBtn.classList.toggle('open', open);
+    if (backdrop) backdrop.classList.toggle('open', open);
+    menuBtn.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+
   menuBtn.addEventListener('click', () => {
-    const isOpen = navbar.classList.toggle('open');
-    menuBtn.classList.toggle('open', isOpen);
-    document.body.style.overflow = isOpen ? 'hidden' : '';
+    setMenu(!navbar.classList.contains('open'));
   });
 
   navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      navbar.classList.remove('open');
-      menuBtn.classList.remove('open');
-      document.body.style.overflow = '';
-    });
+    link.addEventListener('click', () => setMenu(false));
+  });
+
+  /* Close on backdrop tap and on the CV / social links inside the drawer */
+  if (backdrop) backdrop.addEventListener('click', () => setMenu(false));
+  navbar.querySelectorAll('.nav-foot a').forEach(a => {
+    a.addEventListener('click', () => setMenu(false));
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && navbar.classList.contains('open')) setMenu(false);
   });
 
   document.addEventListener('click', e => {
     if (navbar.classList.contains('open')
       && !navbar.contains(e.target)
       && !menuBtn.contains(e.target)) {
-      navbar.classList.remove('open');
-      menuBtn.classList.remove('open');
-      document.body.style.overflow = '';
+      setMenu(false);
     }
   });
+
+  /* Rotating to landscape / resizing past the breakpoint would otherwise
+     leave the backdrop up and the body scroll-locked */
+  const desktop = window.matchMedia('(min-width: 769px)');
+  const onBreakpoint = e => { if (e.matches) setMenu(false); };
+  desktop.addEventListener
+    ? desktop.addEventListener('change', onBreakpoint)
+    : desktop.addListener(onBreakpoint);
 }
 
 /* Smooth scroll */
