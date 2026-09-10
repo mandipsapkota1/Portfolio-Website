@@ -13,7 +13,7 @@ in his inbox.
 
 | File | Role |
 | --- | --- |
-| `src/lib/omnidim.js` | Reads the key, derives the iframe URL. Build-time only. |
+| `src/lib/omnidim.js` | Reads the key, derives both surface URLs. Build-time only. |
 | `src/components/AiAgent.astro` | Launcher, panel and all scoped styles. |
 | `src/scripts/ai-agent.js` | Open/close, lazy mount, focus, placement rules. |
 | `src/layouts/BaseLayout.astro` | Mounts `<AiAgent />` after the page slot. |
@@ -34,11 +34,56 @@ The dashboard hands out a `<script>` snippet. We use the underlying iframe
    position and styling. The iframe lets the launcher and panel be built from
    this site's own tokens (`--glass`, `--yellow`, `--fhead`) so it matches.
 
+### Two surfaces: chat and voice
+
+OmniDimension serves **two widgets off the same key**:
+
+| Surface | URL | Panel tab |
+| --- | --- | --- |
+| Text chat | `https://www.omnidim.io/chat-widget?secret=…` | Chat (default) |
+| Live voice call | `https://www.omnidim.io/voice-widget?secret=…` | Call |
+
+The dashboard's **Widget Type** setting only decides which one *their loader
+script* picks. Since we embed the iframes ourselves, both are offered and the
+visitor chooses. Anything on the page can request a surface directly:
+`data-ai-open="voice"` opens the panel straight into a call — the Contact
+section's "Talk to my AI" button does exactly that.
+
+Both stay mounted once used, so switching tabs does not discard an
+in-progress conversation.
+
+### Voice needs microphone permission granted twice
+
+This is the part that fails silently if you miss it.
+
+1. **The iframe's `allow` attribute** — `allow="microphone; autoplay; clipboard-write"`. Already set.
+2. **The site's `Permissions-Policy` response header** — set by the zone's
+   **"Security headers"** Transform Rule in Cloudflare.
+
+That rule used to send `microphone=()`, which disables the microphone for the
+page *and every iframe inside it*. A voice call would have failed with no
+console error and no visible reason. It now reads:
+
+```
+camera=(), microphone=(self "https://www.omnidim.io"), geolocation=(), payment=()
+```
+
+Camera, geolocation and payment stay fully locked. To verify from the live
+site's console:
+
+```js
+document.featurePolicy.allowsFeature('microphone', 'https://www.omnidim.io')  // must be true
+```
+
+If you ever move the widget to another host, that origin has to be added here
+too, or voice breaks.
+
 ### Performance
 
-The iframe is rendered with **no `src`**. Nothing is requested from
-omnidim.io until the visitor actually opens the panel, so the third party is
-completely outside the critical path. Cost to the page as shipped: **+282
+Both iframes are rendered with **no `src`**. Nothing is requested from
+omnidim.io until the visitor opens the panel, and the voice surface is not
+requested until they press Call — so a visitor who only reads the page, or
+only uses chat, never loads it. Cost to the page as shipped: **+282
 bytes** of JS.
 
 ### Placement rules
@@ -82,6 +127,14 @@ which is connected to this GitHub repo and builds itself on every push:
 | Route | `mandipsapkota.com.np` (+ `www` CNAME, which 301s to apex) |
 
 So **pushing to `main` is the deploy.** Nothing needs to be run by hand.
+
+**The edge can serve stale HTML after a deploy.** A successful build does not
+guarantee the new page is being served — `index.html` came back
+`cf-cache-status: HIT` with the previous build, and a cache-busting query
+string did not help because the asset Worker's cache key ignores it. If a
+deploy looks like it did nothing, purge before debugging anything else:
+Caching → Configuration → Custom Purge → Hostname →
+`mandipsapkota.com.np, www.mandipsapkota.com.np`.
 
 `PUBLIC_OMNIDIM_WIDGET_KEY` lives in that Worker's **Builds → Variables and
 secrets**, not in GitHub secrets — the build happens on Cloudflare, not in
