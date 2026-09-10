@@ -1,4 +1,5 @@
 ---
+import { omnidimEnabled } from '../lib/omnidim.js';
 ---
 <section id="contact" class="contact">
   <div class="scan-line" aria-hidden="true"></div>
@@ -9,6 +10,13 @@
     <div class="contact-info reveal">
       <h2>Let's build something<br><span class="yellow">worth showing off</span></h2>
       <p>Whether you have a full brief or just a rough idea, drop me a message — I'll help you figure out the rest.</p>
+
+      {omnidimEnabled && (
+        <button type="button" class="btn-outline ai-cta" data-ai-open>
+          <i class="bx bx-conversation" aria-hidden="true"></i>
+          Ask my AI assistant instead
+        </button>
+      )}
 
       <ul class="info-list">
         <li>
@@ -136,6 +144,16 @@
 .form-msg.show { max-height: 70px; padding: 1.1rem 1.4rem; }
 .form-msg.ok  { background: rgba(34,197,94,.1); color: #4ade80; border: 1px solid rgba(34,197,94,.2); }
 .form-msg.err { background: rgba(239,68,68,.1); color: #f87171; border: 1px solid rgba(239,68,68,.2); }
+
+/* Alternative entry point to the AI assistant (see AiAgent.astro) */
+/* Tighten the intro's gap when the CTA follows it */
+.contact-info > p:has(+ .ai-cta) { margin-bottom: 1.6rem; }
+.ai-cta {
+  margin-bottom: 2.8rem;
+  font-size: 1.4rem;
+  padding: 1rem 2.2rem;
+}
+.ai-cta i { font-size: 1.8rem; color: var(--yellow); }
 
 .submit-btn { align-self: flex-start; }
 .submit-btn i { font-size: 1.7rem; }

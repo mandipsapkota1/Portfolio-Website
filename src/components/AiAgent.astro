@@ -1,0 +1,283 @@
+---
+import { omnidimEnabled, omnidimSrc, omnidimFrameBg } from '../lib/omnidim.js';
+---
+{omnidimEnabled && (
+<div class="ai-agent" id="ai-agent" data-src={omnidimSrc}>
+
+  <button
+    type="button"
+    class="ai-launcher"
+    id="ai-launcher"
+    aria-expanded="false"
+    aria-controls="ai-panel"
+    aria-label="Open Mandip's AI assistant"
+  >
+    <span class="ai-orb" aria-hidden="true"></span>
+    <span class="ai-launcher-txt">Ask my AI</span>
+  </button>
+
+  <div
+    class="ai-panel"
+    id="ai-panel"
+    role="dialog"
+    aria-modal="false"
+    aria-label="Mandip's AI assistant"
+    inert
+  >
+    <button type="button" class="ai-close" id="ai-close" aria-label="Close assistant">
+      <i class="bx bx-x" aria-hidden="true"></i>
+    </button>
+
+    <div class="ai-body">
+      <div class="ai-loading" id="ai-loading" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
+      <iframe
+        id="ai-frame"
+        title="Mandip Sapkota's AI assistant"
+        allow="microphone; autoplay; clipboard-write"
+        referrerpolicy="strict-origin-when-cross-origin"
+        loading="lazy"
+      ></iframe>
+    </div>
+
+    <p class="ai-foot">
+      AI assistant — may be imprecise. For anything binding,
+      <a href="mailto:info@mandipsapkota.com.np">email me</a>.
+    </p>
+  </div>
+
+</div>
+)}
+
+<style define:vars={{ aiFrameBg: omnidimFrameBg }}>
+/* ─────────────────────────────────────────────────────────────
+   AI ASSISTANT
+   z-index sits below the custom cursor (9999) and the scroll bar
+   (9998), and below the mobile nav drawer (999) / backdrop (998)
+   so the drawer always wins. See Header.astro for that stack.
+   ───────────────────────────────────────────────────────────── */
+
+/* ─── LAUNCHER ─── */
+.ai-launcher {
+  position: fixed;
+  left: 24px;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  z-index: 990;
+
+  display: inline-flex; align-items: center; gap: 10px;
+  height: 52px; padding: 0 20px 0 17px;
+  border-radius: 50px;
+
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px rgba(0,0,0,.42);
+
+  color: var(--text);
+  font-family: var(--fbody);
+  font-size: 1.45rem; font-weight: 500;
+  white-space: nowrap;
+  cursor: none;
+
+  /* Held back until the script reveals it, so it never competes with the hero */
+  opacity: 0; transform: translateY(14px);
+  transition: opacity .45s ease, transform .45s cubic-bezier(.16,1,.3,1),
+              border-color .25s, background .25s, box-shadow .25s;
+}
+.ai-agent.ai-visible .ai-launcher { opacity: 1; transform: none; }
+
+/* Steps above the footer's copyright line rather than covering it */
+.ai-agent.ai-visible.ai-lifted .ai-launcher { transform: translateY(-64px); }
+
+.ai-launcher:hover {
+  border-color: var(--yellow);
+  background: rgba(232,255,72,.08);
+  box-shadow: 0 10px 34px rgba(232,255,72,.14);
+}
+.ai-launcher:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+/* While the panel is open the launcher steps out of the way */
+.ai-agent.ai-open .ai-launcher {
+  opacity: 0; transform: translateY(8px) scale(.96);
+  pointer-events: none;
+}
+
+/* ─── PULSING ORB ─── */
+.ai-orb {
+  position: relative; flex-shrink: 0;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--yellow);
+  animation: ai-pulse 2.6s ease-out infinite;
+}
+
+@keyframes ai-pulse {
+  0%   { box-shadow: 0 0 0 0   rgba(232,255,72,.5); }
+  70%  { box-shadow: 0 0 0 11px rgba(232,255,72,0); }
+  100% { box-shadow: 0 0 0 0   rgba(232,255,72,0); }
+}
+
+/* ─── PANEL ─── */
+.ai-panel {
+  position: fixed;
+  left: 24px;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  z-index: 991;
+
+  width: 374px;
+  max-width: calc(100vw - 48px);
+  height: 566px;
+  max-height: calc(100dvh - 120px);
+
+  display: flex; flex-direction: column; overflow: hidden;
+
+  background: rgba(9,12,21,.9);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border-radius: 1.6rem;
+  box-shadow: 0 26px 70px rgba(0,0,0,.6);
+
+  opacity: 0; visibility: hidden;
+  transform: translateY(16px) scale(.97);
+  transform-origin: bottom left;
+  /* visibility is stepped, not interpolated: it flips to visible the instant
+     .open lands (so the panel can take focus straight away), and is deferred
+     to the end of the fade on the way out. Interpolating it instead makes
+     focusability depend on transition progress, which stalls whenever the
+     tab is backgrounded. */
+  transition: opacity .28s cubic-bezier(.4,0,.2,1),
+              transform .28s cubic-bezier(.4,0,.2,1),
+              visibility 0s linear .28s;
+}
+.ai-panel.open {
+  opacity: 1; visibility: visible; transform: none;
+  transition: opacity .28s cubic-bezier(.4,0,.2,1),
+              transform .28s cubic-bezier(.4,0,.2,1),
+              visibility 0s;
+}
+
+/* ─── CLOSE BUTTON ───
+   The OmniDimension widget draws its own title bar inside the iframe, so a
+   header of ours would just duplicate it. We float the close control over
+   the widget's bar instead: one title, and the whole panel height goes to
+   the conversation. */
+.ai-close {
+  position: absolute; top: 9px; right: 10px; z-index: 3;
+  display: flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(7,9,15,.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,.14);
+  color: #eef0f4; font-size: 1.9rem; line-height: 1;
+  cursor: none;
+  transition: color .25s, border-color .25s, background .25s;
+}
+.ai-close:hover {
+  color: var(--yellow); border-color: var(--yellow);
+  background: rgba(7,9,15,.8);
+}
+.ai-close:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
+
+/* ─── PANEL BODY / IFRAME ─── */
+.ai-body {
+  position: relative; flex: 1; min-height: 0;
+  background: var(--aiFrameBg);
+}
+.ai-body iframe {
+  position: relative; z-index: 1;
+  width: 100%; height: 100%;
+  border: 0; display: block;
+  opacity: 0; transition: opacity .3s ease;
+}
+.ai-agent.ai-ready .ai-body iframe { opacity: 1; }
+
+/* Three-dot loader shown until the iframe fires `load` */
+.ai-loading {
+  position: absolute; inset: 0; z-index: 0;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: opacity .3s ease, visibility .3s;
+}
+/* Retired explicitly rather than left to be painted over — the widget's own
+   background is a dashboard setting and may not stay opaque. */
+.ai-agent.ai-ready .ai-loading { opacity: 0; visibility: hidden; }
+.ai-loading span {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--yellow); opacity: .35;
+  animation: ai-bounce 1.3s ease-in-out infinite;
+}
+.ai-loading span:nth-child(2) { animation-delay: .16s; }
+.ai-loading span:nth-child(3) { animation-delay: .32s; }
+@keyframes ai-bounce {
+  0%, 80%, 100% { transform: translateY(0);    opacity: .3; }
+  40%           { transform: translateY(-6px); opacity: .9; }
+}
+
+/* ─── PANEL FOOTER ─── */
+.ai-foot {
+  flex-shrink: 0;
+  padding: 10px 18px 12px;
+  border-top: 1px solid var(--border);
+  font-size: 1.1rem; line-height: 1.5; color: var(--muted);
+}
+.ai-foot a { color: var(--yellow); }
+.ai-foot a:hover { text-decoration: underline; }
+
+/* ─────────────────────────────────────────────────────────────
+   The mobile nav drawer owns the screen while it is open.
+   ───────────────────────────────────────────────────────────── */
+body:has(#navbar.open) .ai-launcher,
+body:has(#navbar.open) .ai-panel {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+  .ai-launcher {
+    left: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    height: 50px; padding: 0 18px 0 15px;
+  }
+  .ai-panel {
+    left: 12px; right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    width: auto; max-width: none;
+    height: min(76dvh, 560px);
+    max-height: calc(100dvh - 90px);
+  }
+}
+
+/* Icon-only launcher where a pill would crowd the viewport */
+@media (max-width: 400px) {
+  .ai-launcher { width: 52px; padding: 0; justify-content: center; }
+  .ai-launcher-txt { display: none; }
+}
+
+/* Touch devices get a real cursor back — global.css does the same for body */
+@media (hover: none) {
+  .ai-launcher, .ai-close { cursor: pointer; }
+}
+
+/* ─── REDUCED MOTION ─── */
+@media (prefers-reduced-motion: reduce) {
+  .ai-orb { animation: none; }
+  .ai-loading span { animation: none; opacity: .6; }
+  .ai-launcher { transition: opacity .01s, border-color .25s, background .25s; transform: none; }
+  .ai-agent.ai-visible .ai-launcher,
+  .ai-agent.ai-open .ai-launcher { transform: none; }
+  .ai-agent.ai-visible.ai-lifted .ai-launcher { transform: translateY(-64px); }
+  .ai-panel { transition: opacity .01s, visibility .01s; transform: none; }
+  .ai-panel.open { transform: none; }
+}
+
+@media print {
+  .ai-launcher, .ai-panel { display: none !important; }
+}
+</style>

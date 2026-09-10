@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import '../styles/animations.css';
+import AiAgent from '../components/AiAgent.astro';
 
 export interface Props {
   title?: string;
@@ -49,6 +50,9 @@ const {
 
   <slot />
 
+  <!-- AI assistant: renders only when PUBLIC_OMNIDIM_WIDGET_KEY is set at build time -->
+  <AiAgent />
+
   <!-- Scripts loaded as Astro module scripts -->
   <script>
     import '../scripts/cursor.js';
@@ -56,6 +60,7 @@ const {
     import '../scripts/typed.js';
     import '../scripts/animations.js';
     import '../scripts/contact.js';
+    import '../scripts/ai-agent.js';
   </script>
 </body>
 </html>

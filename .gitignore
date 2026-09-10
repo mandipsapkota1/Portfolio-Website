@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.astro/
+
+# Local env (.env.example is committed as the template)
+.env
+.env.local
+.env.production
+
+# IDE / OS
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Claude Code
+.claude/
+
+# Legacy pre-Astro files (kept locally as reference only)
+# Leading slash anchors these to the repo root so they do NOT
+# match public/images/, public/css/, etc.
+/index.html
+/css/
+/js/
+/images/
