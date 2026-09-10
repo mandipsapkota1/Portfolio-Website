@@ -17,14 +17,26 @@ const key = (import.meta.env.PUBLIC_OMNIDIM_WIDGET_KEY || '').trim();
 /** True when a key is present at build time. Everything is inert without one. */
 export const omnidimEnabled = key.length > 0;
 
-/** Cross-origin URL for the widget iframe, or '' when disabled. */
-export const omnidimSrc = omnidimEnabled
-  ? `https://www.omnidim.io/chat-widget?secret=${encodeURIComponent(key)}`
-  : '';
+/**
+ * OmniDimension serves two widget surfaces off the same key. `widgetType` in
+ * the dashboard only decides which one *their* loader script picks; because we
+ * embed the iframe ourselves we can offer both and let the visitor choose.
+ */
+const surface = path =>
+  omnidimEnabled
+    ? `https://www.omnidim.io/${path}?secret=${encodeURIComponent(key)}`
+    : '';
+
+/** Text chat. */
+export const omnidimChatSrc = surface('chat-widget');
+
+/** Live voice call — needs mic permission, see the Permissions-Policy note. */
+export const omnidimVoiceSrc = surface('voice-widget');
 
 /**
- * Background of the OmniDimension widget itself, mirrored on our panel so there
- * is no colour flash while the iframe loads. Keep this in sync with the
- * "Background colour" field on the agent's Web Widget tab in the dashboard.
+ * Header colour of the OmniDimension widget, mirrored on our panel so there is
+ * no colour flash while an iframe loads. Keep in sync with the "Background
+ * colour" field on the agent's Web Widget tab. Note that only the widget's
+ * header is themeable — its conversation area is a fixed light theme.
  */
 export const omnidimFrameBg = '#0d1220';

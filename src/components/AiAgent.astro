@@ -1,8 +1,13 @@
 ---
-import { omnidimEnabled, omnidimSrc, omnidimFrameBg } from '../lib/omnidim.js';
+import { omnidimEnabled, omnidimChatSrc, omnidimVoiceSrc, omnidimFrameBg } from '../lib/omnidim.js';
 ---
 {omnidimEnabled && (
-<div class="ai-agent" id="ai-agent" data-src={omnidimSrc}>
+<div
+  class="ai-agent"
+  id="ai-agent"
+  data-chat-src={omnidimChatSrc}
+  data-voice-src={omnidimVoiceSrc}
+>
 
   <button
     type="button"
@@ -24,17 +29,42 @@ import { omnidimEnabled, omnidimSrc, omnidimFrameBg } from '../lib/omnidim.js';
     aria-label="Mandip's AI assistant"
     inert
   >
-    <button type="button" class="ai-close" id="ai-close" aria-label="Close assistant">
-      <i class="bx bx-x" aria-hidden="true"></i>
-    </button>
+    <div class="ai-modes">
+      <div class="ai-tabs" role="tablist" aria-label="Assistant mode">
+        <button
+          type="button" class="ai-mode is-active" data-mode="chat"
+          role="tab" aria-selected="true" aria-controls="ai-frame-chat"
+        >
+          <i class="bx bx-message-rounded-dots" aria-hidden="true"></i> Chat
+        </button>
+        <button
+          type="button" class="ai-mode" data-mode="voice"
+          role="tab" aria-selected="false" aria-controls="ai-frame-voice"
+        >
+          <i class="bx bx-microphone" aria-hidden="true"></i> Call
+        </button>
+      </div>
+      <button type="button" class="ai-close" id="ai-close" aria-label="Close assistant">
+        <i class="bx bx-x" aria-hidden="true"></i>
+      </button>
+    </div>
 
     <div class="ai-body">
-      <div class="ai-loading" id="ai-loading" aria-hidden="true">
+      <div class="ai-loading" aria-hidden="true">
         <span></span><span></span><span></span>
       </div>
       <iframe
-        id="ai-frame"
-        title="Mandip Sapkota's AI assistant"
+        id="ai-frame-chat"
+        class="ai-frame is-active"
+        title="Chat with Mandip's AI assistant"
+        allow="microphone; autoplay; clipboard-write"
+        referrerpolicy="strict-origin-when-cross-origin"
+        loading="lazy"
+      ></iframe>
+      <iframe
+        id="ai-frame-voice"
+        class="ai-frame"
+        title="Voice call with Mandip's AI assistant"
         allow="microphone; autoplay; clipboard-write"
         referrerpolicy="strict-origin-when-cross-origin"
         loading="lazy"
@@ -81,7 +111,6 @@ import { omnidimEnabled, omnidimSrc, omnidimFrameBg } from '../lib/omnidim.js';
   white-space: nowrap;
   cursor: none;
 
-  /* Held back until the script reveals it, so it never competes with the hero */
   opacity: 0; transform: translateY(14px);
   transition: opacity .45s ease, transform .45s cubic-bezier(.16,1,.3,1),
               border-color .25s, background .25s, box-shadow .25s;
@@ -130,7 +159,7 @@ import { omnidimEnabled, omnidimSrc, omnidimFrameBg } from '../lib/omnidim.js';
 
   width: 374px;
   max-width: calc(100vw - 48px);
-  height: 566px;
+  height: 600px;
   max-height: calc(100dvh - 120px);
 
   display: flex; flex-direction: column; overflow: hidden;
@@ -161,51 +190,74 @@ import { omnidimEnabled, omnidimSrc, omnidimFrameBg } from '../lib/omnidim.js';
               visibility 0s;
 }
 
-/* ─── CLOSE BUTTON ───
-   The OmniDimension widget draws its own title bar inside the iframe, so a
-   header of ours would just duplicate it. We float the close control over
-   the widget's bar instead: one title, and the whole panel height goes to
-   the conversation. */
+/* ─── MODE TOOLBAR ───
+   The widget draws its own title bar inside the iframe, so this row carries
+   no title of its own — it exists to switch surface and to close. */
+.ai-modes {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 9px 9px 10px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.ai-tabs { display: flex; gap: 6px; }
+
+.ai-mode {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 13px;
+  border-radius: 50px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: var(--fbody); font-size: 1.25rem; font-weight: 500;
+  white-space: nowrap; cursor: none;
+  transition: color .2s, border-color .2s, background .2s;
+}
+.ai-mode i { font-size: 1.5rem; }
+.ai-mode:hover { color: var(--text); border-color: rgba(232,255,72,.35); }
+.ai-mode.is-active {
+  color: #07090f; font-weight: 600;
+  background: var(--yellow); border-color: var(--yellow);
+}
+.ai-mode:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
+
 .ai-close {
-  position: absolute; top: 9px; right: 10px; z-index: 3;
+  margin-left: auto; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  width: 30px; height: 30px; border-radius: 50%;
-  background: rgba(7,9,15,.5);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1px solid rgba(255,255,255,.14);
-  color: #eef0f4; font-size: 1.9rem; line-height: 1;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted); font-size: 1.9rem; line-height: 1;
   cursor: none;
   transition: color .25s, border-color .25s, background .25s;
 }
-.ai-close:hover {
-  color: var(--yellow); border-color: var(--yellow);
-  background: rgba(7,9,15,.8);
-}
+.ai-close:hover { color: var(--yellow); border-color: var(--yellow); background: rgba(232,255,72,.07); }
 .ai-close:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
 
-/* ─── PANEL BODY / IFRAME ─── */
+/* ─── BODY / FRAMES ───
+   Both surfaces stay mounted once used, so switching back and forth does not
+   throw away the conversation. Each is only given a src on first use. */
 .ai-body {
   position: relative; flex: 1; min-height: 0;
   background: var(--aiFrameBg);
 }
-.ai-body iframe {
-  position: relative; z-index: 1;
+.ai-frame {
+  position: absolute; inset: 0; z-index: 1;
   width: 100%; height: 100%;
   border: 0; display: block;
-  opacity: 0; transition: opacity .3s ease;
+  opacity: 0; visibility: hidden;
+  transition: opacity .25s ease, visibility .25s;
 }
-.ai-agent.ai-ready .ai-body iframe { opacity: 1; }
+.ai-frame.is-active { opacity: 1; visibility: visible; }
 
-/* Three-dot loader shown until the iframe fires `load` */
+/* Loader covers whichever surface is still coming up */
 .ai-loading {
-  position: absolute; inset: 0; z-index: 0;
+  position: absolute; inset: 0; z-index: 2;
   display: flex; align-items: center; justify-content: center; gap: 6px;
+  background: var(--aiFrameBg);
+  opacity: 0; visibility: hidden;
   transition: opacity .3s ease, visibility .3s;
 }
-/* Retired explicitly rather than left to be painted over — the widget's own
-   background is a dashboard setting and may not stay opaque. */
-.ai-agent.ai-ready .ai-loading { opacity: 0; visibility: hidden; }
+.ai-agent.ai-busy .ai-loading { opacity: 1; visibility: visible; }
 .ai-loading span {
   width: 7px; height: 7px; border-radius: 50%;
   background: var(--yellow); opacity: .35;
@@ -249,7 +301,7 @@ body:has(#navbar.open) .ai-panel {
     left: 12px; right: 12px;
     bottom: calc(12px + env(safe-area-inset-bottom, 0px));
     width: auto; max-width: none;
-    height: min(76dvh, 560px);
+    height: min(78dvh, 600px);
     max-height: calc(100dvh - 90px);
   }
 }
@@ -262,7 +314,7 @@ body:has(#navbar.open) .ai-panel {
 
 /* Touch devices get a real cursor back — global.css does the same for body */
 @media (hover: none) {
-  .ai-launcher, .ai-close { cursor: pointer; }
+  .ai-launcher, .ai-close, .ai-mode { cursor: pointer; }
 }
 
 /* ─── REDUCED MOTION ─── */
@@ -275,6 +327,7 @@ body:has(#navbar.open) .ai-panel {
   .ai-agent.ai-visible.ai-lifted .ai-launcher { transform: translateY(-64px); }
   .ai-panel { transition: opacity .01s, visibility .01s; transform: none; }
   .ai-panel.open { transform: none; }
+  .ai-frame { transition: none; }
 }
 
 @media print {

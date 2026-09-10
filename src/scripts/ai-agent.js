@@ -1,10 +1,16 @@
 /* ─────────────────────────────────────────────────────────────
-   AI ASSISTANT — launcher + lazy-mounted OmniDimension iframe
+   AI ASSISTANT — launcher + lazy-mounted OmniDimension surfaces
 
-   The widget is a cross-origin iframe, not a third-party <script>, so
-   it cannot read this page's DOM, cookies or storage. Nothing is
-   requested from omnidim.io until the visitor actually opens the panel,
-   which keeps the third party out of the critical path entirely.
+   Two surfaces share one agent and one key: /chat-widget for text and
+   /voice-widget for a live spoken call. Both are cross-origin iframes,
+   not third-party <script> tags, so neither can read this page's DOM,
+   cookies or storage. Nothing is requested from omnidim.io until the
+   visitor opens the panel, and the voice surface is not requested until
+   they actually ask for a call.
+
+   Voice needs microphone permission, which has to be granted twice over:
+   by the iframe's own `allow` attribute, and by the site's
+   Permissions-Policy response header. See docs/ai-assistant.md.
 
    Renders only when PUBLIC_OMNIDIM_WIDGET_KEY is set at build time —
    without it AiAgent.astro emits nothing and every guard below no-ops.
@@ -16,29 +22,74 @@ if (root) {
   const launcher = document.getElementById('ai-launcher');
   const panel    = document.getElementById('ai-panel');
   const closeBtn = document.getElementById('ai-close');
-  const frame    = document.getElementById('ai-frame');
-  const src      = root.dataset.src || '';
+  const tabs     = [...root.querySelectorAll('.ai-mode')];
 
-  let mounted = false;
-  let isOpen  = false;
+  const surfaces = {
+    chat:  { frame: document.getElementById('ai-frame-chat'),  src: root.dataset.chatSrc  || '' },
+    voice: { frame: document.getElementById('ai-frame-voice'), src: root.dataset.voiceSrc || '' },
+  };
+
+  let isOpen = false;
+  let mode   = 'chat';
 
   panel.tabIndex = -1;
 
   /* ─── LAZY MOUNT ───
-     First open pays the iframe load; every later open is instant. */
-  function mount() {
-    if (mounted || !src) return;
-    mounted = true;
-    frame.addEventListener('load', () => root.classList.add('ai-ready'), { once: true });
-    frame.src = src;
+     Each surface pays its load once, the first time it is asked for. */
+  function mount(name) {
+    const s = surfaces[name];
+    if (!s || s.mounted || !s.src) return;
+    s.mounted = true;
+    root.classList.add('ai-busy');
+    s.frame.addEventListener('load', () => {
+      s.loaded = true;
+      if (mode === name) root.classList.remove('ai-busy');
+    }, { once: true });
+    s.frame.src = s.src;
   }
 
+  /* ─── MODE ───
+     Both surfaces stay mounted once used, so switching back and forth
+     does not throw away an in-progress conversation. */
+  function setMode(next) {
+    if (!surfaces[next] || next === mode) return;
+    mode = next;
+    mount(next);
+
+    for (const [name, s] of Object.entries(surfaces)) {
+      s.frame.classList.toggle('is-active', name === next);
+    }
+    for (const tab of tabs) {
+      const on = tab.dataset.mode === next;
+      tab.classList.toggle('is-active', on);
+      tab.setAttribute('aria-selected', String(on));
+    }
+
+    /* Show the loader only if the surface we switched to is still coming up */
+    root.classList.toggle('ai-busy', !surfaces[next].loaded);
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => setMode(tab.dataset.mode));
+  });
+
+  /* Left/right arrows move between tabs, as a tablist should */
+  root.querySelector('.ai-tabs').addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    const i = tabs.findIndex(t => t.dataset.mode === mode);
+    const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+    setMode(next.dataset.mode);
+    next.focus();
+  });
+
   /* ─── OPEN / CLOSE ─── */
-  function setOpen(next) {
+  function setOpen(next, wanted) {
+    if (next && wanted && surfaces[wanted]) setMode(wanted);
     if (next === isOpen) return;
     isOpen = next;
 
-    if (next) mount();
+    if (next) mount(mode);
 
     root.classList.toggle('ai-open', next);
     panel.classList.toggle('open', next);
@@ -67,11 +118,12 @@ if (root) {
   launcher.addEventListener('click', () => setOpen(!isOpen));
   closeBtn.addEventListener('click', () => setOpen(false));
 
-  /* Any element on the page can open the assistant — see Contact.astro */
+  /* Any element on the page can open the assistant, and may name the surface
+     it wants: data-ai-open="voice" opens straight into a call. */
   document.querySelectorAll('[data-ai-open]').forEach(el => {
     el.addEventListener('click', e => {
       e.preventDefault();
-      setOpen(true);
+      setOpen(true, el.dataset.aiOpen || undefined);
     });
   });
 
@@ -89,7 +141,7 @@ if (root) {
     }).observe(navbar, { attributes: true, attributeFilter: ['class'] });
   }
 
-  /* ─── ALWAYS AVAILABLE ───
+  /* ─── WHERE THE LAUNCHER IS ALLOWED TO SHOW ───
      The launcher is present on every section, from the hero down. The one
      place it cannot simply sit still is the footer's copyright line, which
      occupies the same corner — there it lifts clear rather than vanishing,
