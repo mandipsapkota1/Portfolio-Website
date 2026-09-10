@@ -61,12 +61,47 @@ It also yields to the mobile nav drawer (`body:has(#navbar.open)`), and a
    ```
    PUBLIC_OMNIDIM_WIDGET_KEY=<key>
    ```
-3. For the GitHub Pages deploy, add the same value as a repository secret
-   named `PUBLIC_OMNIDIM_WIDGET_KEY`. `.github/workflows/deploy.yml` already
-   passes it to the build step.
+3. For production, the same value is set as a **Cloudflare build variable**
+   (already done) — see the deployment section below.
 
 **With no key set, `AiAgent.astro` renders nothing at all** — the site builds
 and deploys exactly as before. That keeps forks and PR builds working.
+
+## How this site actually deploys
+
+Worth knowing, because the repo contains misleading leftovers.
+
+`mandipsapkota.com.np` is served by the Cloudflare **Worker `portfoliowebsite`**,
+which is connected to this GitHub repo and builds itself on every push:
+
+| Setting | Value |
+| --- | --- |
+| Production branch | `main` |
+| Build command | `npm run build` |
+| Deploy command | `npx wrangler deploy` |
+| Route | `mandipsapkota.com.np` (+ `www` CNAME, which 301s to apex) |
+
+So **pushing to `main` is the deploy.** Nothing needs to be run by hand.
+
+`PUBLIC_OMNIDIM_WIDGET_KEY` lives in that Worker's **Builds → Variables and
+secrets**, not in GitHub secrets — the build happens on Cloudflare, not in
+GitHub Actions. Note that a static-assets Worker cannot take *runtime*
+variables; this is a build-time variable, which is what an Astro
+`import.meta.env` lookup needs anyway.
+
+Two leftovers that are not the deploy path, and should not be treated as one:
+
+- **GitHub Pages.** There is a `_github-pages-challenge` DNS TXT record and
+  a `public/CNAME`. Pages does not serve this domain. A
+  `.github/workflows/deploy.yml` targeting Pages was deliberately left out of
+  this branch — adding it would create a second pipeline racing Cloudflare.
+- **`npm run deploy`** (`astro build && wrangler versions upload`) uploads a
+  version but does *not* activate it, so it never changes the live site. Prefer
+  pushing to `main`.
+
+`wrangler.jsonc` must keep `"name": "portfoliowebsite"`. It previously said
+`mandip-portfolio`, which is why Cloudflare raised a config-mismatch warning on
+every build.
 
 ## Security
 
