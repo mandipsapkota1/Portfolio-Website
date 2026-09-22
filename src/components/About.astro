@@ -1,45 +1,33 @@
 ---
-import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
+import StackScene from './StackScene.astro';
 import { site } from '../data/site';
 import { languages } from '../data/experience';
-import photo from '../assets/photos/pokhara.jpg';
 ---
 <section class="about section section-sunken" id="about" aria-labelledby="about-title">
   <div class="container about-grid">
-    <figure class="about-figure reveal">
-      <Image
-        src={photo}
-        alt="Mandip sitting at a lakeside cafe at Phewa Lake, Pokhara, with the hills behind"
-        width={720}
-        densities={[1, 1.5, 2]}
-        format="webp"
-        quality={80}
-        loading="lazy"
-        class="about-photo"
-      />
-      <figcaption>Phewa Lake, Pokhara</figcaption>
-    </figure>
+    <div class="about-visual reveal">
+      <StackScene />
+    </div>
 
     <div class="about-copy">
       <div class="section-head reveal">
         <p class="eyebrow">About</p>
-        <h2 id="about-title">A developer who also ships the marketing</h2>
+        <h2 id="about-title">A full stack developer who also ships the marketing</h2>
       </div>
 
       <div class="about-text reveal" style="--reveal-delay:.06s">
         <p>
-          I am a BSc IT graduate from ISMT College in Kathmandu and I have been building
-          for clients since 2023. Most of that work is websites for small businesses, built
-          in Astro and deployed on Cloudflare, with PHP and MySQL behind the scenes when a
-          project needs accounts, uploads or an admin panel.
+          I am a BSc IT graduate from ISMT College and I have been building for clients
+          since 2023. Most of that work is websites for small businesses, built in Astro and
+          deployed on Cloudflare, with PHP and MySQL behind the scenes when a project needs
+          accounts, uploads or an admin panel.
         </p>
         <p>
-          I started at Tivra Institute in Bharatpur, then spent a year at Maulakalika
-          Networks in Gaindakot as an assistant application developer, moving from a three
-          month internship into the full role. Since 2026 I have been handling social media
-          for Oasis Education, which means planning content and producing the short form
-          video that goes with it.
+          I started at Tivra Institute, then spent a year at Maulakalika Networks as an
+          assistant application developer, moving from a three month internship into the
+          full role. Since 2026 I have been handling social media for Oasis Education, which
+          means planning content and producing the short form video that goes with it.
         </p>
         <p>
           Outside client work I build Android apps in Java and Kotlin, and I take security
@@ -59,7 +47,7 @@ import photo from '../assets/photos/pokhara.jpg';
         </div>
         <div>
           <dt><Icon name="briefcase" size={18} /> Open to</dt>
-          <dd>Freelance websites and Android apps, and frontend roles</dd>
+          <dd>Freelance web and Android projects, and full stack developer roles</dd>
         </div>
       </dl>
 
@@ -73,23 +61,12 @@ import photo from '../assets/photos/pokhara.jpg';
 <style>
 .about-grid {
   display: grid;
-  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
   gap: clamp(2.5rem, 6vw, 5.5rem);
   align-items: start;
 }
 
-.about-figure { position: sticky; top: calc(var(--header-h) + 2rem); }
-.about-photo {
-  width: 100%; aspect-ratio: 4 / 5;
-  object-fit: cover; object-position: 50% 45%;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-md);
-}
-.about-figure figcaption {
-  margin-top: .75rem;
-  font-size: .875rem; color: var(--text-3);
-}
+.about-visual { position: sticky; top: calc(var(--header-h) + 2rem); }
 
 .about-copy .section-head { margin-bottom: 1.75rem; }
 
@@ -120,8 +97,7 @@ import photo from '../assets/photos/pokhara.jpg';
 
 @media (max-width: 900px) {
   .about-grid { grid-template-columns: 1fr; }
-  .about-figure { position: static; max-width: 24rem; }
-  .about-photo { aspect-ratio: 5 / 4; object-position: 50% 55%; }
+  .about-visual { position: static; max-width: 30rem; }
 }
 @media (max-width: 600px) {
   .about-facts { grid-template-columns: 1fr; padding: 1.25rem; }

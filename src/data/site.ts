@@ -4,7 +4,7 @@
  */
 export const site = {
   name: 'Mandip Sapkota',
-  role: 'Frontend and mobile app developer',
+  role: 'Full stack and mobile app developer',
   location: 'Gaindakot, Nepal',
   country: 'Nepal',
   email: 'info@mandipsapkota.com.np',
@@ -14,9 +14,9 @@ export const site = {
   cv: '/cv/Mandip-Sapkota-CV.pdf',
   cvFilename: 'Mandip-Sapkota-CV.pdf',
 
-  title: 'Mandip Sapkota, frontend and mobile app developer in Nepal',
+  title: 'Mandip Sapkota, full stack and mobile app developer in Nepal',
   description:
-    'Frontend and mobile app developer based in Nepal. I build fast websites in Astro and Android apps for small businesses in Nepal and Australia.',
+    'Full stack and mobile app developer based in Nepal. I build fast websites in Astro with PHP and MySQL behind them, and Android apps, for small businesses in Nepal and Australia.',
 
   socials: [
     { label: 'GitHub',   href: 'https://github.com/mandipsapkota1',                       icon: 'github' },
@@ -26,7 +26,7 @@ export const site = {
 
   nav: [
     { label: 'About',      href: '#about' },
-    { label: 'Work',       href: '#work' },
+    { label: 'Projects',   href: '#projects' },
     { label: 'Experience', href: '#experience' },
     { label: 'Toolkit',    href: '#toolkit' },
     { label: 'Contact',    href: '#contact' },

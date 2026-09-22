@@ -1,0 +1,300 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { projects, otherWork, categories, type Category } from '../data/projects';
+import { omnidimEnabled } from '../lib/omnidim.js';
+
+const counts = projects.reduce<Record<string, number>>((acc, p) => {
+  acc[p.category] = (acc[p.category] ?? 0) + 1;
+  return acc;
+}, {});
+const filters: { id: 'all' | Category; label: string; count: number }[] = [
+  { id: 'all', label: 'All', count: projects.length },
+  ...(Object.keys(categories) as Category[]).map(id => ({ id, label: categories[id], count: counts[id] ?? 0 })),
+];
+
+const isExternal = (url: string) => /^https?:\/\//.test(url);
+---
+<section class="projects section" id="projects" aria-labelledby="projects-title">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Projects</p>
+      <h2 id="projects-title">Work you can open and use</h2>
+      <p class="lead">
+        Client websites, a full stack platform and the games I build on the side. Every card
+        opens the working project where one is public.
+      </p>
+    </div>
+
+    <div class="proj-toolbar reveal" style="--reveal-delay:.05s">
+      <div class="proj-filters" role="group" aria-label="Filter projects by type" id="proj-filters">
+        {filters.map(f => (
+          <button type="button" class="proj-filter" data-filter={f.id} aria-pressed={f.id === 'all' ? 'true' : 'false'}>
+            {f.label} <span class="proj-count">{f.count}</span>
+          </button>
+        ))}
+      </div>
+      <p class="proj-status-line" id="proj-status" role="status" aria-live="polite">Showing all {projects.length} projects</p>
+    </div>
+
+    <ul class="proj-grid" id="proj-grid" role="list">
+      {projects.map((p, i) => {
+        const label = p.liveLabel ?? 'View live site';
+        const external = p.live ? isExternal(p.live) : false;
+        return (
+          <li class="proj-card card reveal" data-category={p.category} style={`--reveal-delay:${(i % 3) * .07}s`}>
+            {p.live ? (
+              <a
+                class="proj-media"
+                href={p.live}
+                target="_blank"
+                rel={external ? 'noopener' : undefined}
+                aria-label={`${label}: ${p.name}`}
+                tabindex="-1"
+              >
+                <Image src={p.image} alt={p.imageAlt} widths={[480, 720, 960]} sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 33vw" format="webp" quality={78} loading="lazy" />
+                <span class="proj-peek"><Icon name="arrow-up-right" size={16} /> {label}</span>
+              </a>
+            ) : (
+              <div class="proj-media">
+                <Image src={p.image} alt={p.imageAlt} widths={[480, 720, 960]} sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 33vw" format="webp" quality={78} loading="lazy" />
+              </div>
+            )}
+
+            <div class="proj-body">
+              <p class="proj-kind">
+                <span class="proj-cat">{categories[p.category]}</span>
+                <span class="proj-kind-text">{p.kind}</span>
+              </p>
+              <h3 class="proj-name">{p.name}</h3>
+              <p class="proj-summary">{p.summary}</p>
+              <ul class="tags" role="list">
+                {p.tags.map(t => <li class="tag">{t}</li>)}
+              </ul>
+            </div>
+
+            <div class="proj-actions">
+              {p.live && (
+                <a href={p.live} class="btn btn-secondary btn-sm" target="_blank" rel={external ? 'noopener' : undefined}>
+                  {label} <Icon name="arrow-up-right" />
+                </a>
+              )}
+              {p.assistant && omnidimEnabled && (
+                <button type="button" class="btn btn-secondary btn-sm" data-ai-open="chat">
+                  <Icon name="message" /> Try the assistant
+                </button>
+              )}
+              {p.assistant && !omnidimEnabled && (
+                <span class="proj-note"><Icon name="check" size={16} /> You are looking at it</span>
+              )}
+              {p.status && (
+                <span class="proj-note"><Icon name="check" size={16} /> {p.status}</span>
+              )}
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+
+    <p class="proj-empty" id="proj-empty" hidden>Nothing in this category yet.</p>
+
+    <div class="other">
+      <div class="other-head reveal">
+        <h3>Also built</h3>
+        <p class="muted">Coursework and smaller builds that are not deployed anywhere public.</p>
+      </div>
+      <ul class="other-grid" role="list">
+        {otherWork.map((w, i) => (
+          <li class="other-item reveal" style={`--reveal-delay:${(i % 2) * .06}s`}>
+            <p class="proj-kind"><span class="proj-cat">{w.kind}</span></p>
+            <h4>{w.name}</h4>
+            <p>{w.summary}</p>
+            <ul class="tags" role="list">
+              {w.tags.map(t => <li class="tag">{t}</li>)}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+  const grid    = document.getElementById('proj-grid');
+  const filters = document.getElementById('proj-filters');
+  const status  = document.getElementById('proj-status');
+  const empty   = document.getElementById('proj-empty');
+
+  if (grid && filters) {
+    const cards   = [...grid.querySelectorAll('.proj-card')];
+    const buttons = [...filters.querySelectorAll('.proj-filter')];
+    const reduce  = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let timer = 0;
+
+    function apply(filter) {
+      buttons.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.filter === filter)));
+
+      const show = cards.filter(c => filter === 'all' || c.dataset.category === filter);
+      const hide = cards.filter(c => !show.includes(c));
+
+      /* Leaving cards fade first; entering cards are unhidden and then
+         released from their start state on the next frame so they animate in. */
+      hide.forEach(c => c.classList.add('is-out'));
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        hide.forEach(c => { c.hidden = true; c.classList.remove('is-out'); });
+        show.forEach(c => {
+          if (c.hidden) {
+            c.classList.add('is-in');
+            c.hidden = false;
+          }
+          c.classList.add('is-visible');
+        });
+        requestAnimationFrame(() => show.forEach(c => c.classList.remove('is-in')));
+        if (empty) empty.hidden = show.length > 0;
+      }, reduce ? 0 : 180);
+
+      if (status) {
+        const label = buttons.find(b => b.dataset.filter === filter)?.firstChild?.textContent?.trim().toLowerCase() ?? '';
+        status.textContent = filter === 'all'
+          ? `Showing all ${show.length} projects`
+          : `Showing ${show.length} ${show.length === 1 ? 'project' : 'projects'} in ${label}`;
+      }
+    }
+
+    buttons.forEach(b => b.addEventListener('click', () => apply(b.dataset.filter)));
+  }
+</script>
+
+<style>
+/* ─── Toolbar ─── */
+.proj-toolbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+}
+.proj-filters { display: flex; flex-wrap: wrap; gap: .375rem; }
+.proj-filter {
+  display: inline-flex; align-items: center; gap: .45rem;
+  min-height: 2.375rem; padding: .45rem .9rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: .9375rem; font-weight: 600;
+  transition: color .18s, border-color .18s, background-color .18s;
+}
+.proj-filter:hover { color: var(--text); border-color: var(--line-strong); }
+.proj-filter[aria-pressed="true"] { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
+.proj-count { font-size: .8125rem; font-weight: 500; opacity: .75; }
+.proj-status-line { font-size: .9rem; color: var(--text-3); }
+
+/* ─── Grid ─── */
+.proj-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.proj-card {
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  transition: transform .3s var(--ease-out), box-shadow .3s var(--ease-out), border-color .3s, opacity .2s var(--ease-out);
+}
+.proj-card[hidden] { display: none; }
+.proj-card:hover, .proj-card:focus-within {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--line-strong);
+}
+/* Filter transitions */
+.proj-card.is-out { opacity: 0; transform: translateY(6px) scale(.985); }
+.proj-card.is-in  { opacity: 0; transform: translateY(10px); }
+
+/* Media */
+.proj-media {
+  position: relative; display: block;
+  aspect-ratio: 1600 / 867;
+  overflow: hidden;
+  background: var(--bg-sunken);
+  border-bottom: 1px solid var(--line);
+}
+.proj-media img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: top;
+  transition: transform .6s var(--ease-out);
+}
+.proj-card:hover .proj-media img, .proj-card:focus-within .proj-media img { transform: scale(1.03); }
+
+.proj-peek {
+  position: absolute; left: .75rem; bottom: .75rem;
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .4rem .7rem;
+  border-radius: 999px;
+  background: rgba(28, 24, 23, .82);
+  color: #fff;
+  font-size: .8125rem; font-weight: 600;
+  opacity: 0; transform: translateY(6px);
+  transition: opacity .25s var(--ease-out), transform .25s var(--ease-out);
+  pointer-events: none;
+}
+.proj-card:hover .proj-peek, .proj-card:focus-within .proj-peek { opacity: 1; transform: none; }
+
+/* Body */
+.proj-body { display: flex; flex-direction: column; flex: 1; padding: 1.25rem 1.25rem 0; }
+.proj-kind {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .5rem;
+  font-size: .8125rem; color: var(--text-3);
+  margin-bottom: .55rem;
+}
+.proj-cat {
+  display: inline-flex; align-items: center;
+  padding: .15rem .55rem; border-radius: 999px;
+  background: var(--accent-soft); color: var(--accent-text);
+  font-weight: 600; letter-spacing: .04em; text-transform: uppercase; font-size: .7rem;
+}
+.proj-kind-text { font-weight: 500; }
+.proj-name { font-family: var(--font-serif); font-size: 1.375rem; font-weight: 500; letter-spacing: -.01em; }
+.proj-name a { color: inherit; }
+.proj-summary { margin-top: .6rem; color: var(--text-2); font-size: .9375rem; flex: 1; }
+.proj-body .tags { margin-top: 1rem; }
+
+.proj-actions {
+  display: flex; align-items: center; flex-wrap: wrap; gap: .5rem;
+  padding: 1rem 1.25rem 1.25rem;
+}
+.proj-note {
+  display: inline-flex; align-items: center; gap: .4rem;
+  min-height: 2.375rem;
+  font-size: .9rem; color: var(--text-2);
+}
+.proj-note svg { color: var(--ok); }
+
+.proj-empty { margin-top: 1rem; color: var(--text-2); }
+
+/* ─── Also built ─── */
+.other { margin-top: clamp(3.5rem, 7vw, 5.5rem); padding-top: clamp(2.5rem, 5vw, 3.5rem); border-top: 1px solid var(--line); }
+.other-head { margin-bottom: 1.5rem; }
+.other-head h3 { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 500; }
+.other-head p { margin-top: .35rem; }
+.other-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 2.5rem; }
+.other-item { padding: 1.25rem 0; border-top: 1px solid var(--line); }
+.other-item h4 { font-size: 1.0625rem; }
+.other-item p:not(.proj-kind) { margin-top: .4rem; color: var(--text-2); font-size: .9375rem; }
+.other-item .tags { margin-top: .875rem; }
+
+@media (max-width: 1100px) {
+  .proj-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .proj-grid { grid-template-columns: 1fr; }
+  .other-grid { grid-template-columns: 1fr; gap: 0; }
+  .proj-toolbar { align-items: flex-start; }
+}
+@media (hover: none) {
+  .proj-card:hover { transform: none; box-shadow: var(--shadow-sm); }
+  .proj-peek { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .proj-card, .proj-media img, .proj-peek { transition: none; }
+}
+</style>

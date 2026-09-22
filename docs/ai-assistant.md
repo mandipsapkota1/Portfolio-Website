@@ -22,7 +22,7 @@ captures enquiries so they land in his inbox.
 | `src/layouts/BaseLayout.astro` | Mounts `<AiAgent />` after the page slot. |
 | `src/components/Assistant.astro` | The "Ask my assistant" section under the hero, with sample questions. |
 | `src/components/Contact.astro` | "Chat with my assistant" and "Call it" buttons. |
-| `src/components/Work.astro` | "Try the assistant" link on the portfolio case study. |
+| `src/components/Projects.astro` | "Try the assistant" button on the portfolio project card. |
 
 Anything with a `data-ai-open` attribute opens the panel, so new entry points
 need no changes to the script. `data-ai-open="voice"` opens straight into a
@@ -107,7 +107,7 @@ viewport width.
    (already done). See the deployment section below.
 
 **With no key set, `AiAgent.astro` and `Assistant.astro` render nothing at
-all** and the Contact and Work entry points disappear. The site builds and
+all** and the Contact and Projects entry points disappear. The site builds and
 deploys exactly as before, which keeps forks and PR builds working.
 
 ## How this site actually deploys

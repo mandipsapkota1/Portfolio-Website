@@ -35,4 +35,9 @@ export const skills: SkillGroup[] = [
     note: 'What I bring to the marketing side of a project',
     items: ['UI design', 'Graphic design', 'Short form video', 'Social media content'],
   },
+  {
+    name: 'Games',
+    note: 'Side projects that keep the JavaScript sharp',
+    items: ['Lens Studio', 'Canvas', 'Game design'],
+  },
 ];

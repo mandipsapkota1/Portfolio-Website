@@ -52,7 +52,7 @@ export const roles: Role[] = [
   },
   {
     period: '2023 to present',
-    title: 'Freelance Frontend and Mobile App Developer',
+    title: 'Freelance Full Stack and Mobile App Developer',
     org: 'Self employed',
     place: 'Nepal',
     points: [
