@@ -1,130 +1,129 @@
 ---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+import { languages } from '../data/experience';
+import photo from '../assets/photos/pokhara.jpg';
 ---
-<section id="about" class="about">
-  <div class="scan-line" aria-hidden="true"></div>
-  <p class="sec-label">01 — About</p>
+<section class="about section section-sunken" id="about" aria-labelledby="about-title">
+  <div class="container about-grid">
+    <figure class="about-figure reveal">
+      <Image
+        src={photo}
+        alt="Mandip sitting at a lakeside cafe at Phewa Lake, Pokhara, with the hills behind"
+        width={720}
+        densities={[1, 1.5, 2]}
+        format="webp"
+        quality={80}
+        loading="lazy"
+        class="about-photo"
+      />
+      <figcaption>Phewa Lake, Pokhara</figcaption>
+    </figure>
 
-  <div class="about-wrap">
-    <div class="about-text reveal">
-      <h2>From first line of code<br>to <span class="yellow">final pixel</span></h2>
-      <p>I write code that works and design interfaces that hold attention. My stack spans
-         HTML, CSS, JavaScript, PHP, and Python — plus Android development in Java and
-         Kotlin when the project calls for it.</p>
-      <p>Wrapping up my BSc. IT at ISMT College in Kathmandu, where coursework in
-         databases, system analysis, and cybersecurity shaped how I think about
-         building things that actually hold up.</p>
+    <div class="about-copy">
+      <div class="section-head reveal">
+        <p class="eyebrow">About</p>
+        <h2 id="about-title">A developer who also ships the marketing</h2>
+      </div>
 
-      <div class="counters">
-        <div class="counter-item">
-          <strong data-target="3">3+</strong>
-          <span>Years coding</span>
+      <div class="about-text reveal" style="--reveal-delay:.06s">
+        <p>
+          I am a BSc IT graduate from ISMT College in Kathmandu and I have been building
+          for clients since 2023. Most of that work is websites for small businesses, built
+          in Astro and deployed on Cloudflare, with PHP and MySQL behind the scenes when a
+          project needs accounts, uploads or an admin panel.
+        </p>
+        <p>
+          I started at Tivra Institute in Bharatpur, then spent a year at Maulakalika
+          Networks in Gaindakot as an assistant application developer, moving from a three
+          month internship into the full role. Since 2026 I have been handling social media
+          for Oasis Education, which means planning content and producing the short form
+          video that goes with it.
+        </p>
+        <p>
+          Outside client work I build Android apps in Java and Kotlin, and I take security
+          seriously: how logins and sessions are handled, and how the domains I run are
+          configured. It is a habit from my degree that has stayed with me.
+        </p>
+      </div>
+
+      <dl class="about-facts reveal" style="--reveal-delay:.12s">
+        <div>
+          <dt><Icon name="map-pin" size={18} /> Location</dt>
+          <dd>{site.location}</dd>
         </div>
-        <div class="counter-item">
-          <strong data-target="20">20+</strong>
-          <span>Projects built</span>
+        <div>
+          <dt><Icon name="globe" size={18} /> Languages</dt>
+          <dd>{languages.join(', ')}</dd>
         </div>
-        <div class="counter-item">
-          <strong data-target="6">6+</strong>
-          <span>Technologies</span>
+        <div>
+          <dt><Icon name="briefcase" size={18} /> Open to</dt>
+          <dd>Freelance websites and Android apps, and frontend roles</dd>
         </div>
-      </div>
+      </dl>
 
-      <a href="#contact" class="btn-solid">Get In Touch &rarr;</a>
-    </div>
-
-    <div class="about-cards reveal-group">
-      <div class="acard glass-card border-beam-wrap">
-        <div class="beam" aria-hidden="true"></div>
-        <i class="bx bx-code-alt"></i>
-        <h4>Clean Code</h4>
-        <p>Every project ships with code a teammate could read on day one — structured, documented, and built to last beyond the deadline.</p>
-      </div>
-      <div class="acard glass-card border-beam-wrap">
-        <div class="beam" aria-hidden="true"></div>
-        <i class="bx bx-palette"></i>
-        <h4>Creative Design</h4>
-        <p>Good design isn't decoration. It's the difference between a site visitors trust and one they bounce from in three seconds.</p>
-      </div>
-      <div class="acard glass-card border-beam-wrap">
-        <div class="beam" aria-hidden="true"></div>
-        <i class="bx bx-mobile-alt"></i>
-        <h4>Responsive</h4>
-        <p>Built to work on every screen from the start — not patched for mobile after the fact.</p>
-      </div>
-      <div class="acard glass-card border-beam-wrap">
-        <div class="beam" aria-hidden="true"></div>
-        <i class="bx bx-rocket"></i>
-        <h4>Performance</h4>
-        <p>Speed is a feature. Every project is optimised so the first load feels instant and every interaction stays snappy.</p>
-      </div>
+      <a href={site.cv} download={site.cvFilename} class="btn btn-secondary about-cv reveal" style="--reveal-delay:.16s">
+        <Icon name="download" /> Download my CV
+      </a>
     </div>
   </div>
 </section>
 
 <style>
-.about {
-  background: var(--bg2);
-  padding-top: 9rem; padding-bottom: 9rem;
-  position: relative; overflow: hidden;
-}
-
-/* Diagonal grid texture */
-.about::before {
-  content: '';
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(232,255,72,.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(232,255,72,.02) 1px, transparent 1px);
-  background-size: 60px 60px;
-  pointer-events: none;
-}
-
-.about-wrap {
+.about-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6rem; align-items: start;
-  position: relative;
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  gap: clamp(2.5rem, 6vw, 5.5rem);
+  align-items: start;
 }
 
-.about-text h2 {
-  font-family: var(--fhead);
-  font-size: clamp(2.8rem, 3.5vw, 4rem);
-  font-weight: 700; line-height: 1.15; margin-bottom: 2rem;
+.about-figure { position: sticky; top: calc(var(--header-h) + 2rem); }
+.about-photo {
+  width: 100%; aspect-ratio: 4 / 5;
+  object-fit: cover; object-position: 50% 45%;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-md);
 }
-.about-text p { color: var(--muted); font-size: 1.55rem; margin-bottom: 1.6rem; }
+.about-figure figcaption {
+  margin-top: .75rem;
+  font-size: .875rem; color: var(--text-3);
+}
 
-.counters { display: flex; gap: 3.5rem; margin: 3rem 0; }
-.counter-item strong {
-  display: block; font-family: var(--fhead);
-  font-size: 3.2rem; font-weight: 700;
-  color: var(--yellow); line-height: 1;
-}
-.counter-item span { font-size: 1.25rem; color: var(--muted); }
+.about-copy .section-head { margin-bottom: 1.75rem; }
 
-/* Glass cards grid */
-.about-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem; }
+.about-text { display: grid; gap: 1.1rem; color: var(--text-2); font-size: 1.0625rem; }
+.about-text p { max-width: 38em; }
 
-.acard {
-  padding: 2.2rem 2rem;
-  transition: border-color .3s, transform .3s, box-shadow .3s;
+.about-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-top: 2.25rem;
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
 }
-.acard:hover {
-  border-color: rgba(232,255,72,.3);
-  transform: translateY(-5px);
-  box-shadow: 0 12px 40px rgba(232,255,72,.07);
+.about-facts dt {
+  display: flex; align-items: center; gap: .45rem;
+  font-size: .8125rem; font-weight: 600;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: .4rem;
 }
-.acard i    { font-size: 2.6rem; color: var(--yellow); margin-bottom: 1.2rem; display: block; filter: drop-shadow(0 0 6px rgba(232,255,72,.3)); }
-.acard h4   { font-family: var(--fhead); font-size: 1.6rem; font-weight: 600; margin-bottom: .7rem; }
-.acard p    { font-size: 1.35rem; color: var(--muted); line-height: 1.6; }
+.about-facts dt svg { color: var(--accent-text); }
+.about-facts dd { font-size: .9875rem; line-height: 1.45; }
 
-@media (max-width: 1100px) {
-  .about-wrap { grid-template-columns: 1fr; gap: 4rem; }
-}
+.about-cv { margin-top: 1.75rem; }
+
 @media (max-width: 900px) {
-  .about-cards { grid-template-columns: 1fr 1fr; }
+  .about-grid { grid-template-columns: 1fr; }
+  .about-figure { position: static; max-width: 24rem; }
+  .about-photo { aspect-ratio: 5 / 4; object-position: 50% 55%; }
 }
-@media (max-width: 500px) {
-  .about-cards { grid-template-columns: 1fr; }
-  .counters { gap: 2rem; }
+@media (max-width: 600px) {
+  .about-facts { grid-template-columns: 1fr; padding: 1.25rem; }
 }
 </style>

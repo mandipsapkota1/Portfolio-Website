@@ -1,1 +1,1 @@
-Place your CV PDF here as mandip-sapkota-cv.pdf
+Place the current CV here as Mandip-Sapkota-CV.pdf (that exact name is linked from the site).

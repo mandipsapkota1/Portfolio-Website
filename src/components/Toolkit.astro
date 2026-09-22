@@ -1,0 +1,62 @@
+---
+import { skills } from '../data/skills';
+---
+<section class="toolkit section" id="toolkit" aria-labelledby="toolkit-title">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Toolkit</p>
+      <h2 id="toolkit-title">What I work with</h2>
+      <p class="lead">
+        Grouped by where each tool sits in a project. I would rather show what I have shipped
+        with these than put a percentage next to them.
+      </p>
+    </div>
+
+    <ul class="skill-groups" role="list">
+      {skills.map((g, i) => (
+        <li class="skill-group reveal" style={`--reveal-delay:${i * .05}s`}>
+          <div class="skill-meta">
+            <h3>{g.name}</h3>
+            <p>{g.note}</p>
+          </div>
+          <ul class="skill-items" role="list">
+            {g.items.map(item => <li class="skill">{item}</li>)}
+          </ul>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+.skill-groups {
+  border-top: 1px solid var(--line);
+}
+.skill-group {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 1.5rem 3rem;
+  padding: 1.75rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.skill-meta h3 { font-size: 1.125rem; }
+.skill-meta p { margin-top: .3rem; color: var(--text-2); font-size: .9375rem; }
+
+.skill-items { display: flex; flex-wrap: wrap; gap: .625rem; align-content: start; }
+.skill {
+  display: inline-flex; align-items: center;
+  padding: .55rem .95rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  font-size: .9875rem; font-weight: 500;
+  box-shadow: var(--shadow-sm);
+  transition: border-color .18s, color .18s;
+}
+.skill:hover { border-color: var(--accent); color: var(--accent-text); }
+
+@media (max-width: 700px) {
+  .skill-group { grid-template-columns: 1fr; gap: 1rem; }
+}
+</style>

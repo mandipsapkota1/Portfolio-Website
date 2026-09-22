@@ -1,184 +1,148 @@
 ---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
 ---
 <header class="header" id="header">
-  <a href="#home" class="logo">Mandip<span>.</span></a>
+  <div class="container header-inner">
+    <a href="#top" class="wordmark" aria-label={`${site.name}, back to top`}>{site.name}</a>
 
-  <nav class="navbar" id="navbar">
-    <a href="#home"      class="nav-link">Home</a>
-    <a href="#about"     class="nav-link">About</a>
-    <a href="#education" class="nav-link">Journey</a>
-    <a href="#skills"    class="nav-link">Skills</a>
-    <a href="#projects"  class="nav-link">Projects</a>
-    <a href="#contact"   class="nav-link">Contact</a>
+    <nav class="nav" id="nav" aria-label="Primary">
+      <ul class="nav-list" role="list">
+        {site.nav.map(item => (
+          <li><a href={item.href} class="nav-link">{item.label}</a></li>
+        ))}
+      </ul>
 
-    <!-- Mobile-only drawer footer -->
-    <div class="nav-foot">
-      <a href="/cv/Mandip-Sapkota-CV.pdf" download="Mandip-Sapkota-CV.pdf" class="btn-solid nav-cv">
-        <i class="bx bx-download"></i> Download CV
-      </a>
-      <div class="nav-socials">
-        <a href="https://www.facebook.com/mandip.sapkota123" aria-label="Facebook" target="_blank" rel="noopener">
-          <i class="bx bxl-facebook"></i>
+      <div class="nav-foot">
+        <a href={site.cv} download={site.cvFilename} class="btn btn-secondary">
+          <Icon name="download" /> Download CV
         </a>
-        <a href="https://www.linkedin.com/in/mandip-sapkota-86578937a/" aria-label="LinkedIn" target="_blank" rel="noopener">
-          <i class="bx bxl-linkedin"></i>
-        </a>
-        <a href="https://github.com/mandipsapkota1" aria-label="GitHub" target="_blank" rel="noopener">
-          <i class="bx bxl-github"></i>
-        </a>
+        <ul class="nav-socials" role="list">
+          {site.socials.map(s => (
+            <li>
+              <a href={s.href} class="icon-btn" target="_blank" rel="noopener" aria-label={s.label}>
+                <Icon name={s.icon} size={18} />
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
+    </nav>
+
+    <div class="header-actions">
+      <button type="button" class="icon-btn theme-toggle" id="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false">
+        <Icon name="moon" class="icon-moon" />
+        <Icon name="sun"  class="icon-sun" />
+      </button>
+      <a href={site.cv} download={site.cvFilename} class="btn btn-secondary btn-sm header-cv">
+        <Icon name="download" /> CV
+      </a>
+      <button type="button" class="icon-btn menu-btn" id="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
+        <Icon name="menu" class="icon-open" />
+        <Icon name="x"    class="icon-close" />
+      </button>
     </div>
-  </nav>
-
-  <div class="nav-backdrop" id="nav-backdrop" aria-hidden="true"></div>
-
-  <a href="/cv/Mandip-Sapkota-CV.pdf" download="Mandip-Sapkota-CV.pdf" class="btn-cv header-cv">
-    <i class="bx bx-download"></i> CV
-  </a>
-
-  <button class="menu-btn" id="menu-btn" aria-label="Toggle menu">
-    <span></span><span></span><span></span>
-  </button>
+  </div>
 </header>
 
 <style>
 .header {
-  position: fixed; top: 0; left: 0; width: 100%;
-  height: var(--hh); padding: 0 8%;
-  display: flex; align-items: center; justify-content: space-between;
-  z-index: 1000;
-  transition: background .35s, box-shadow .35s, backdrop-filter .35s;
+  position: sticky; top: 0; z-index: 100;
+  height: var(--header-h);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
+  backdrop-filter: saturate(140%) blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color .25s var(--ease-out), background-color .25s var(--ease-out);
 }
-.header.sticky {
-  background: var(--glass);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 1px 0 var(--border);
+.header.is-stuck { border-bottom-color: var(--line); }
+
+.header-inner {
+  height: 100%;
+  display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
 }
 
-.logo {
-  font-family: var(--fhead); font-size: 2.2rem; font-weight: 800;
-  color: var(--text); letter-spacing: -.02em;
+.wordmark {
+  font-family: var(--font-serif);
+  font-size: 1.375rem; font-weight: 600;
+  letter-spacing: -.01em;
+  color: var(--text);
+  white-space: nowrap;
 }
-.logo span { color: var(--yellow); }
+.wordmark:hover { color: var(--text); }
 
-.navbar { display: flex; align-items: center; gap: .2rem; }
-
+.nav-list { display: flex; align-items: center; gap: .25rem; }
 .nav-link {
-  position: relative;
-  font-size: 1.45rem; font-weight: 500; color: var(--muted);
-  padding: .7rem 1.4rem; border-radius: 50px;
-  transition: color .25s;
+  display: inline-block;
+  padding: .5rem .8rem;
+  border-radius: var(--radius-sm);
+  font-size: .9875rem; font-weight: 500;
+  color: var(--text-2);
+  transition: color .18s, background-color .18s;
 }
-.nav-link::after {
-  content: '';
-  position: absolute; bottom: 4px; left: 50%;
-  transform: translateX(-50%);
-  width: 4px; height: 4px; border-radius: 50%;
-  background: var(--yellow);
-  opacity: 0; transition: opacity .25s;
+.nav-link:hover { color: var(--text); background: var(--bg-sunken); }
+.nav-link.is-active { color: var(--text); }
+.nav-link.is-active::after {
+  content: ''; display: block;
+  margin: .2rem auto 0; width: 1.25rem; height: 2px;
+  background: var(--accent); border-radius: 2px;
 }
-.nav-link:hover { color: var(--text); }
-.nav-link.active { color: var(--text); }
-.nav-link.active::after { opacity: 1; }
+.nav-link::after { content: ''; display: block; margin: .2rem auto 0; width: 1.25rem; height: 2px; background: transparent; }
 
-.header-cv { font-size: 1.3rem; padding: .7rem 1.4rem; }
-
-.menu-btn {
-  display: none; flex-direction: column; gap: 5px;
-  background: none; cursor: none; padding: .5rem;
-}
-.menu-btn span {
-  display: block; width: 22px; height: 2px;
-  background: var(--text); border-radius: 2px; transition: .3s;
-}
-.menu-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.menu-btn.open span:nth-child(2) { opacity: 0; }
-.menu-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-/* Drawer footer is desktop-hidden */
 .nav-foot { display: none; }
 
-/* Backdrop behind the mobile drawer */
-.nav-backdrop {
-  position: fixed; inset: 0;
-  background: rgba(7,9,15,.6);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
-  opacity: 0; visibility: hidden;
-  transition: opacity .3s ease, visibility .3s;
-  z-index: 998;
-}
-.nav-backdrop.open { opacity: 1; visibility: visible; }
+.header-actions { display: flex; align-items: center; gap: .625rem; }
 
-@media (max-width: 768px) {
-  .header { padding: 0 6%; }
+.theme-toggle .icon-sun { display: none; }
+:global([data-theme="dark"]) .theme-toggle .icon-sun  { display: block; }
+:global([data-theme="dark"]) .theme-toggle .icon-moon { display: none; }
+
+.menu-btn { display: none; }
+.menu-btn .icon-close { display: none; }
+.menu-btn[aria-expanded="true"] .icon-open  { display: none; }
+.menu-btn[aria-expanded="true"] .icon-close { display: block; }
+
+@media (max-width: 860px) {
   .header-cv { display: none; }
-  .menu-btn { display: flex; z-index: 1001; position: relative; }
+  .menu-btn { display: inline-flex; }
 
-  .navbar {
-    position: fixed; top: 0; right: 0;
-    width: min(82vw, 330px);
-    height: 100vh; height: 100dvh;
-    flex-direction: column;
-    align-items: stretch; justify-content: flex-start;
-    gap: 0;
-    background: rgba(7,9,15,.98);
-    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    border-left: 1px solid var(--glass-border);
-    padding: calc(var(--hh) + 2rem) 2.2rem 2.6rem;
-    /* transform beats `right` — composited, no layout per frame */
-    transform: translateX(100%);
-    transition: transform .34s cubic-bezier(.4,0,.2,1);
+  .nav {
+    position: fixed;
+    top: var(--header-h); left: 0; right: 0;
+    max-height: calc(100dvh - var(--header-h));
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    z-index: 999;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    box-shadow: var(--shadow-lg);
+    padding: .75rem var(--gutter) 1.75rem;
+    display: flex; flex-direction: column; gap: 1.25rem;
+    opacity: 0; visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity .22s var(--ease-out), transform .22s var(--ease-out), visibility 0s linear .22s;
   }
-  .navbar.open { transform: translateX(0); }
+  .nav.is-open {
+    opacity: 1; visibility: visible; transform: none;
+    transition: opacity .22s var(--ease-out), transform .22s var(--ease-out), visibility 0s;
+  }
 
-  /* Left-aligned rows with generous tap targets (min 48px) */
+  .nav-list { flex-direction: column; align-items: stretch; gap: 0; }
   .nav-link {
-    font-size: 1.75rem; font-weight: 500;
-    padding: 1.6rem .4rem;
+    display: block;
+    padding: .9rem .25rem;
+    font-size: 1.125rem;
+    border-bottom: 1px solid var(--line);
     border-radius: 0;
-    border-bottom: 1px solid rgba(255,255,255,.06);
-    text-align: left;
   }
-  .nav-link:last-of-type { border-bottom: none; }
+  .nav-link:hover { background: transparent; }
+  .nav-link::after, .nav-link.is-active::after { display: none; }
+  .nav-link.is-active { color: var(--accent-text); }
+  .nav-list li:last-child .nav-link { border-bottom: 0; }
 
-  /* Centre dot reads as a stray speck on a left-aligned row — use a left bar */
-  .nav-link::after { display: none; }
-  .nav-link.active {
-    color: var(--yellow);
-    box-shadow: inset 2px 0 0 var(--yellow);
-    padding-left: 1.2rem;
-  }
-
-  /* Footer pinned to the bottom of the drawer */
-  .nav-foot {
-    display: flex; flex-direction: column; gap: 1.8rem;
-    margin-top: auto; padding-top: 2.4rem;
-  }
-  .nav-cv {
-    justify-content: center; width: 100%;
-    font-size: 1.4rem; padding: 1.15rem 1.4rem;
-  }
-  .nav-cv i { font-size: 1.7rem; }
-  .nav-socials {
-    display: flex; justify-content: center; gap: 1.6rem;
-  }
-  .nav-socials a {
-    display: flex; align-items: center; justify-content: center;
-    width: 42px; height: 42px; border-radius: 50%;
-    border: 1px solid var(--glass-border);
-    color: var(--muted); font-size: 2rem;
-    transition: color .25s, border-color .25s;
-  }
-  .nav-socials a:active { color: var(--yellow); border-color: var(--yellow); }
+  .nav-foot { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .nav-socials { display: flex; gap: .5rem; }
 }
 
-@media (max-width: 380px) {
-  .navbar { width: 88vw; padding-left: 1.8rem; padding-right: 1.8rem; }
-  .nav-link { font-size: 1.6rem; padding: 1.15rem .4rem; }
+@media (prefers-reduced-motion: reduce) {
+  .nav { transition: none; transform: none; }
 }
 </style>

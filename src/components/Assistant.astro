@@ -1,0 +1,110 @@
+---
+import Icon from './Icon.astro';
+import { omnidimEnabled } from '../lib/omnidim.js';
+
+/**
+ * A proper home for the assistant on the page, instead of leaving it to a
+ * corner button. Every control here opens the same panel AiAgent.astro
+ * renders; data-ai-open names the surface it should start on.
+ */
+const questions = [
+  'What did Mandip build for Helios Talent?',
+  'Is he available for a website project next month?',
+  'Which stack does he use for Android apps?',
+  'How does this assistant work?',
+];
+---
+{omnidimEnabled && (
+<section class="assistant section-bordered" id="assistant" aria-labelledby="assistant-title">
+  <div class="container assistant-grid">
+    <div class="assistant-copy reveal">
+      <p class="eyebrow">Assistant</p>
+      <h2 id="assistant-title">Ask my assistant, by chat or by voice</h2>
+      <p class="lead">
+        It knows my projects, my stack and my availability, and it will answer general
+        questions too. Every conversation is summarised to my inbox, so a question asked
+        here reaches me the same as an email would.
+      </p>
+      <ul class="assistant-notes" role="list">
+        <li><Icon name="check" size={18} /> No sign up and nothing to install</li>
+        <li><Icon name="check" size={18} /> Voice calls need microphone access, nothing else</li>
+        <li><Icon name="check" size={18} /> Runs in a sandboxed frame, so it cannot read this page</li>
+      </ul>
+    </div>
+
+    <div class="assistant-card card reveal" style="--reveal-delay:.08s">
+      <div class="assistant-actions">
+        <button type="button" class="btn btn-primary" data-ai-open="chat">
+          <Icon name="message" /> Start a chat
+        </button>
+        <button type="button" class="btn btn-secondary" data-ai-open="voice">
+          <Icon name="mic" /> Start a voice call
+        </button>
+      </div>
+
+      <p class="assistant-try eyebrow">Things people ask</p>
+      <ul class="assistant-questions" role="list">
+        {questions.map(q => (
+          <li>
+            <button type="button" class="assistant-q" data-ai-open="chat">
+              <span>{q}</span>
+              <Icon name="arrow-right" size={16} />
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+)}
+
+<style>
+.assistant { padding-block: clamp(3.5rem, 7vw, 5.5rem); }
+
+.assistant-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+}
+
+.assistant-copy .eyebrow { margin-bottom: .875rem; }
+.assistant-copy .lead { margin-top: 1rem; }
+
+.assistant-notes {
+  margin-top: 1.5rem;
+  display: grid; gap: .6rem;
+  color: var(--text-2);
+  font-size: .9875rem;
+}
+.assistant-notes li { display: flex; align-items: center; gap: .6rem; }
+.assistant-notes svg { color: var(--ok); flex: none; }
+
+.assistant-card { padding: clamp(1.25rem, 3vw, 1.75rem); }
+
+.assistant-actions { display: flex; flex-wrap: wrap; gap: .625rem; }
+.assistant-actions .btn { flex: 1 1 12rem; }
+
+.assistant-try { margin: 1.5rem 0 .625rem; }
+
+.assistant-questions { display: grid; gap: .375rem; }
+.assistant-q {
+  width: 100%;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: .7rem .875rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: .9625rem; font-weight: 500;
+  text-align: left;
+  transition: border-color .18s, background-color .18s, color .18s;
+}
+.assistant-q svg { flex: none; color: var(--text-3); transition: transform .18s var(--ease-out), color .18s; }
+.assistant-q:hover { border-color: var(--line-strong); color: var(--accent-text); }
+.assistant-q:hover svg { transform: translateX(3px); color: var(--accent-text); }
+
+@media (max-width: 860px) {
+  .assistant-grid { grid-template-columns: 1fr; }
+}
+</style>

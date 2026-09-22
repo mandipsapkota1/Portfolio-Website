@@ -1,10 +1,10 @@
 /**
- * OmniDimension web widget — single source of truth.
+ * OmniDimension web widget: single source of truth.
  *
  * The key below is a *publishable* embed key. It is shipped inside the built
  * HTML by necessity (the widget is a cross-origin iframe keyed by it), exactly
  * like a Stripe publishable key or a browser-restricted Maps key. Keeping it in
- * an env var buys us easy rotation and a clean git history — it does NOT make
+ * an env var buys us easy rotation and a clean git history. It does NOT make
  * it secret. The real access control is the domain allowlist configured on the
  * agent in the OmniDimension dashboard.
  *
@@ -30,13 +30,13 @@ const surface = path =>
 /** Text chat. */
 export const omnidimChatSrc = surface('chat-widget');
 
-/** Live voice call — needs mic permission, see the Permissions-Policy note. */
+/** Live voice call. Needs mic permission, see the Permissions-Policy note. */
 export const omnidimVoiceSrc = surface('voice-widget');
 
 /**
  * Header colour of the OmniDimension widget, mirrored on our panel so there is
  * no colour flash while an iframe loads. Keep in sync with the "Background
  * colour" field on the agent's Web Widget tab. Note that only the widget's
- * header is themeable — its conversation area is a fixed light theme.
+ * header is themeable; its conversation area is a fixed light theme.
  */
 export const omnidimFrameBg = '#0d1220';

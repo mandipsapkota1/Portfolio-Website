@@ -1,64 +1,99 @@
 ---
 import '../styles/global.css';
-import '../styles/animations.css';
 import AiAgent from '../components/AiAgent.astro';
+import { site } from '../data/site';
+import { roles, education } from '../data/experience';
 
 export interface Props {
   title?: string;
   description?: string;
 }
-const {
-  title = 'Mandip Sapkota — Developer & Designer',
-  description = 'Web developer & designer crafting seamless digital experiences with HTML, CSS, JavaScript, PHP & Python.'
-} = Astro.props;
+
+const { title = site.title, description = site.description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const ogImage = new URL('/og.jpg', site.url).href;
+
+const currentRole = roles.find(r => r.current);
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  url: site.url,
+  image: new URL('/images/portrait.jpg', site.url).href,
+  jobTitle: site.role,
+  email: `mailto:${site.email}`,
+  telephone: site.phone,
+  address: { '@type': 'PostalAddress', addressLocality: 'Gaindakot', addressCountry: 'NP' },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: education[0].org },
+  worksFor: currentRole ? { '@type': 'Organization', name: currentRole.org } : undefined,
+  knowsAbout: ['HTML', 'CSS', 'JavaScript', 'Astro', 'PHP', 'MySQL', 'Android', 'Java', 'Kotlin', 'Cloudflare'],
+  knowsLanguage: ['ne', 'en', 'hi'],
+  sameAs: site.socials.map(s => s.href),
+};
 ---
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
   <meta name="description" content={description} />
+  <meta name="author" content={site.name} />
+  <link rel="canonical" href={canonical} />
 
-  <!-- Open Graph -->
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f4f0" />
+  <meta name="theme-color" media="(prefers-color-scheme: dark)"  content="#161211" />
+
+  <meta property="og:type"        content="website" />
+  <meta property="og:site_name"   content={site.name} />
   <meta property="og:title"       content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content={canonical} />
+  <meta property="og:image"       content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt"   content={`${site.name}, ${site.role}`} />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="twitter:title"      content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image"      content={ogImage} />
 
-  <title>{title}</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%2307090f'/><text x='7' y='49' font-family='Georgia,serif' font-size='46' font-weight='700' fill='%23e8ff48'>M</text><circle cx='57' cy='47' r='5' fill='%23e8ff48'/></svg>" />
-  <link rel="alternate icon" href="/favicon.svg" />
+  <!-- Theme is resolved before paint so there is no flash between modes -->
+  <script is:inline>
+    (function () {
+      var root = document.documentElement;
+      root.classList.add('js');
+      var stored = null;
+      try { stored = localStorage.getItem('theme'); } catch (e) {}
+      var dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      root.setAttribute('data-theme', dark ? 'dark' : 'light');
+    })();
+  </script>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+  />
 
-  <!-- Icons -->
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-
+  <script type="application/ld+json" set:html={JSON.stringify(person)} />
 </head>
 <body>
-
-  <!-- Scroll progress bar -->
-  <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
-
-  <div class="cursor-dot"></div>
-  <div class="cursor-ring"></div>
+  <a href="#main" class="skip-link">Skip to content</a>
 
   <slot />
 
-  <!-- AI assistant: renders only when PUBLIC_OMNIDIM_WIDGET_KEY is set at build time -->
+  <!-- Renders only when PUBLIC_OMNIDIM_WIDGET_KEY is set at build time -->
   <AiAgent />
 
-  <!-- Scripts loaded as Astro module scripts -->
   <script>
-    import '../scripts/cursor.js';
-    import '../scripts/nav.js';
-    import '../scripts/typed.js';
-    import '../scripts/animations.js';
+    import '../scripts/theme.js';
+    import '../scripts/header.js';
+    import '../scripts/reveal.js';
     import '../scripts/contact.js';
     import '../scripts/ai-agent.js';
   </script>

@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   output: 'static',
-  site: 'https://www.mandipsapkota.com.np',
+  site: 'https://mandipsapkota.com.np',
   build: {
     assets: 'assets'
   }

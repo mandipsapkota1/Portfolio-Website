@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mandipsapkota.com.np/sitemap.xml

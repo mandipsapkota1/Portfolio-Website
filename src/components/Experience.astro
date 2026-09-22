@@ -1,0 +1,144 @@
+---
+import Icon from './Icon.astro';
+import { roles, education, certifications } from '../data/experience';
+---
+<section class="experience section section-sunken" id="experience" aria-labelledby="experience-title">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Experience</p>
+      <h2 id="experience-title">Where I have worked and studied</h2>
+      <p class="lead">
+        A steady move from coursework to client work: an institute in Bharatpur, a year in a
+        development team in Gaindakot, and now marketing for an education consultancy alongside
+        freelance builds.
+      </p>
+    </div>
+
+    <div class="exp-grid">
+      <div class="exp-col">
+        <h3 class="exp-heading reveal"><Icon name="briefcase" /> Work</h3>
+        <ol class="timeline" role="list">
+          {roles.map((r, i) => (
+            <li class="tl-item reveal" style={`--reveal-delay:${i * .05}s`}>
+              <div class="tl-marker" aria-hidden="true"></div>
+              <div class="tl-when">
+                <span>{r.period}</span>
+                {r.current && <span class="tl-now">Now</span>}
+              </div>
+              <div class="tl-body">
+                <h4>{r.title}</h4>
+                <p class="tl-org">{r.org}, {r.place}</p>
+                <ul class="tl-points" role="list">
+                  {r.points.map(pt => <li>{pt}</li>)}
+                </ul>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <aside class="exp-col exp-side">
+        <h3 class="exp-heading reveal"><Icon name="graduation" /> Education</h3>
+        <ol class="edu-list" role="list">
+          {education.map((e, i) => (
+            <li class="edu-item card reveal" style={`--reveal-delay:${i * .05}s`}>
+              <span class="edu-when">{e.period}</span>
+              <h4>{e.title}</h4>
+              <p class="edu-org">{e.org}{e.place ? `, ${e.place}` : ''}</p>
+              {e.note && <p class="edu-note">{e.note}</p>}
+            </li>
+          ))}
+        </ol>
+
+        <h3 class="exp-heading exp-heading-gap reveal"><Icon name="check" /> Certification</h3>
+        <ol class="edu-list" role="list">
+          {certifications.map(c => (
+            <li class="edu-item card reveal">
+              <span class="edu-when">{c.period}</span>
+              <h4>{c.title}</h4>
+              <p class="edu-org">{c.org}</p>
+            </li>
+          ))}
+        </ol>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<style>
+.exp-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: start;
+}
+
+.exp-heading {
+  display: flex; align-items: center; gap: .6rem;
+  font-size: 1.0625rem; font-weight: 600;
+  color: var(--text-2);
+  padding-bottom: .875rem; margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--line);
+}
+.exp-heading svg { color: var(--accent-text); width: 1.125rem; height: 1.125rem; }
+.exp-heading-gap { margin-top: 2.5rem; }
+
+/* Timeline */
+.timeline { position: relative; display: grid; gap: 2rem; }
+.tl-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 9.5rem minmax(0, 1fr);
+  gap: 1.25rem;
+  padding-left: 1.75rem;
+}
+.tl-item::before {
+  content: '';
+  position: absolute; left: .4375rem; top: 1.4rem; bottom: -2rem;
+  width: 1px; background: var(--line-strong);
+}
+.tl-item:last-child::before { display: none; }
+.tl-marker {
+  position: absolute; left: 0; top: .5rem;
+  width: .9375rem; height: .9375rem; border-radius: 999px;
+  background: var(--bg-sunken);
+  border: 2px solid var(--line-strong);
+}
+.tl-item:first-child .tl-marker { border-color: var(--accent); background: var(--accent); }
+
+.tl-when {
+  display: flex; flex-direction: column; align-items: flex-start; gap: .4rem;
+  padding-top: .2rem;
+  font-size: .9375rem; font-weight: 500; color: var(--text-2);
+}
+.tl-now {
+  padding: .1rem .5rem; border-radius: 999px;
+  background: var(--accent-soft); color: var(--accent-text);
+  font-size: .75rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+}
+
+.tl-body h4 { font-size: 1.125rem; }
+.tl-org { margin-top: .2rem; color: var(--text-2); font-size: .9625rem; }
+.tl-points {
+  margin-top: .75rem; padding-left: 1.1rem;
+  display: grid; gap: .45rem;
+  list-style: disc; color: var(--text-2); font-size: .9625rem;
+}
+.tl-points li::marker { color: var(--text-3); }
+
+/* Education */
+.edu-list { display: grid; gap: .75rem; }
+.edu-item { padding: 1.125rem 1.25rem; }
+.edu-when { font-size: .8125rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-3); }
+.edu-item h4 { margin-top: .35rem; font-size: 1.0625rem; }
+.edu-org { margin-top: .15rem; color: var(--text-2); font-size: .9375rem; }
+.edu-note { margin-top: .5rem; color: var(--text-2); font-size: .9rem; }
+
+@media (max-width: 900px) {
+  .exp-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .tl-item { grid-template-columns: 1fr; gap: .5rem; }
+  .tl-when { flex-direction: row; align-items: center; gap: .75rem; }
+}
+</style>

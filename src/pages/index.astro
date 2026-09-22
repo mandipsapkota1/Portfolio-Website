@@ -1,22 +1,24 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Header    from '../components/Header.astro';
-import Hero      from '../components/Hero.astro';
-import About     from '../components/About.astro';
-import Journey   from '../components/Journey.astro';
-import Skills    from '../components/Skills.astro';
-import Projects  from '../components/Projects.astro';
-import Contact   from '../components/Contact.astro';
-import Footer    from '../components/Footer.astro';
+import Header     from '../components/Header.astro';
+import Hero       from '../components/Hero.astro';
+import Assistant  from '../components/Assistant.astro';
+import About      from '../components/About.astro';
+import Work       from '../components/Work.astro';
+import Experience from '../components/Experience.astro';
+import Toolkit    from '../components/Toolkit.astro';
+import Contact    from '../components/Contact.astro';
+import Footer     from '../components/Footer.astro';
 ---
 <BaseLayout>
   <Header />
-  <main>
+  <main id="main">
     <Hero />
+    <Assistant />
     <About />
-    <Journey />
-    <Skills />
-    <Projects />
+    <Work />
+    <Experience />
+    <Toolkit />
     <Contact />
   </main>
   <Footer />

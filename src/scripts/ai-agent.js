@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────────────────────
-   AI ASSISTANT — launcher + lazy-mounted OmniDimension surfaces
+   AI ASSISTANT: launcher + lazy-mounted OmniDimension surfaces
 
    Two surfaces share one agent and one key: /chat-widget for text and
    /voice-widget for a live spoken call. Both are cross-origin iframes,
@@ -12,8 +12,8 @@
    by the iframe's own `allow` attribute, and by the site's
    Permissions-Policy response header. See docs/ai-assistant.md.
 
-   Renders only when PUBLIC_OMNIDIM_WIDGET_KEY is set at build time —
-   without it AiAgent.astro emits nothing and every guard below no-ops.
+   Renders only when PUBLIC_OMNIDIM_WIDGET_KEY is set at build time.
+   Without it AiAgent.astro emits nothing and every guard below no-ops.
    ───────────────────────────────────────────────────────────── */
 
 const root = document.getElementById('ai-agent');
@@ -96,7 +96,7 @@ if (root) {
     launcher.setAttribute('aria-expanded', String(next));
     launcher.setAttribute(
       'aria-label',
-      next ? "Close Mandip's AI assistant" : "Open Mandip's AI assistant"
+      next ? "Close the assistant" : "Open the assistant"
     );
 
     if (next) {
@@ -107,7 +107,7 @@ if (root) {
       void panel.offsetHeight;
       panel.focus({ preventScroll: true });
     } else {
-      /* Only reclaim focus if it is still inside the panel — otherwise the
+      /* Only reclaim focus if it is still inside the panel, otherwise the
          visitor has already moved on and yanking it back is disorienting. */
       const focusWasInside = panel.contains(document.activeElement);
       panel.setAttribute('inert', '');
@@ -132,19 +132,19 @@ if (root) {
   });
 
   /* ─── YIELD TO THE MOBILE NAV ───
-     The drawer is fixed at z-999 and locks body scroll; leaving a chat
+     The menu panel covers the viewport on small screens; leaving a chat
      panel live underneath it strands focus in a covered element. */
-  const navbar = document.getElementById('navbar');
+  const navbar = document.getElementById('nav');
   if (navbar && 'MutationObserver' in window) {
     new MutationObserver(() => {
-      if (navbar.classList.contains('open')) setOpen(false);
+      if (navbar.classList.contains('is-open')) setOpen(false);
     }).observe(navbar, { attributes: true, attributeFilter: ['class'] });
   }
 
   /* ─── WHERE THE LAUNCHER IS ALLOWED TO SHOW ───
      The launcher is present on every section, from the hero down. The one
-     place it cannot simply sit still is the footer's copyright line, which
-     occupies the same corner — there it lifts clear rather than vanishing,
+     place it cannot simply sit still is the footer's bottom line, which
+     occupies the same corner. There it lifts clear rather than vanishing,
      so the assistant is never absent from the page. */
   root.classList.add('ai-visible');
 

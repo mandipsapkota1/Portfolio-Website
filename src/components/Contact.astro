@@ -1,178 +1,200 @@
 ---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
 import { omnidimEnabled } from '../lib/omnidim.js';
 ---
-<section id="contact" class="contact">
-  <div class="scan-line" aria-hidden="true"></div>
-  <p class="sec-label">05 — Contact</p>
+<section class="contact section section-sunken" id="contact" aria-labelledby="contact-title">
+  <div class="container contact-grid">
+    <div class="contact-info">
+      <div class="section-head reveal">
+        <p class="eyebrow">Contact</p>
+        <h2 id="contact-title">Tell me about the project</h2>
+        <p class="lead">
+          A few lines about what you need, the timeline you have in mind and how you prefer
+          to be reached is plenty. I usually reply within a day.
+        </p>
+      </div>
 
-  <div class="contact-wrap">
-    <!-- Info -->
-    <div class="contact-info reveal">
-      <h2>Let's build something<br><span class="yellow">worth showing off</span></h2>
-      <p>Whether you have a full brief or just a rough idea, drop me a message — I'll help you figure out the rest.</p>
-
-      {omnidimEnabled && (
-        <div class="ai-cta-row">
-          <button type="button" class="btn-outline ai-cta" data-ai-open="chat">
-            <i class="bx bx-message-rounded-dots" aria-hidden="true"></i>
-            Chat with my AI
-          </button>
-          <button type="button" class="btn-outline ai-cta" data-ai-open="voice">
-            <i class="bx bx-microphone" aria-hidden="true"></i>
-            Talk to my AI
-          </button>
-        </div>
-      )}
-
-      <ul class="info-list">
+      <ul class="contact-list reveal" role="list" style="--reveal-delay:.06s">
         <li>
-          <i class="bx bx-envelope"></i>
-          <a href="mailto:info@mandipsapkota.com.np">info@mandipsapkota.com.np</a>
+          <span class="contact-ico"><Icon name="mail" /></span>
+          <div>
+            <span class="contact-label">Email</span>
+            <a href={`mailto:${site.email}`}>{site.email}</a>
+          </div>
         </li>
-        <li><i class="bx bx-phone"></i> +977 9840318084</li>
-        <li><i class="bx bx-map"></i> Kathmandu, Nepal</li>
+        <li>
+          <span class="contact-ico"><Icon name="phone" /></span>
+          <div>
+            <span class="contact-label">Phone and WhatsApp</span>
+            <a href={site.phoneHref}>{site.phone}</a>
+          </div>
+        </li>
+        <li>
+          <span class="contact-ico"><Icon name="map-pin" /></span>
+          <div>
+            <span class="contact-label">Location</span>
+            <span>{site.location}, working with clients in Nepal and Australia</span>
+          </div>
+        </li>
       </ul>
 
-      <div class="socials">
-        <a href="https://www.facebook.com/mandip.sapkota123" aria-label="Facebook" target="_blank" rel="noopener">
-          <i class="bx bxl-facebook"></i>
-        </a>
-        <a href="https://www.linkedin.com/in/mandip-sapkota-86578937a/" aria-label="LinkedIn" target="_blank" rel="noopener">
-          <i class="bx bxl-linkedin"></i>
-        </a>
-        <a href="https://github.com/mandipsapkota1" aria-label="GitHub" target="_blank" rel="noopener">
-          <i class="bx bxl-github"></i>
-        </a>
-      </div>
+      <ul class="contact-socials reveal" role="list" style="--reveal-delay:.1s">
+        {site.socials.map(s => (
+          <li>
+            <a href={s.href} class="btn btn-quiet btn-sm" target="_blank" rel="noopener">
+              <Icon name={s.icon} size={17} /> {s.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      {omnidimEnabled && (
+        <div class="contact-ai reveal" style="--reveal-delay:.14s">
+          <p>Prefer to ask a quick question first?</p>
+          <div class="contact-ai-btns">
+            <button type="button" class="btn btn-secondary btn-sm" data-ai-open="chat">
+              <Icon name="message" /> Chat with my assistant
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" data-ai-open="voice">
+              <Icon name="mic" /> Call it
+            </button>
+          </div>
+        </div>
+      )}
     </div>
 
-    <!-- Form -->
-    <form class="contact-form glass-card reveal border-beam-wrap" id="contact-form" novalidate>
-      <div class="beam" aria-hidden="true"></div>
-
+    <form class="contact-form card reveal" id="contact-form" novalidate style="--reveal-delay:.08s">
       <div class="form-row">
         <div class="field">
-          <label>Full Name <span>*</span></label>
-          <input type="text" name="from_name" placeholder="Mandip" required />
+          <label for="f-name">Name</label>
+          <input id="f-name" type="text" name="name" autocomplete="name" required />
         </div>
         <div class="field">
-          <label>Email Address <span>*</span></label>
-          <input type="email" name="from_email" placeholder="mandip@example.com" required />
+          <label for="f-email">Email</label>
+          <input id="f-email" type="email" name="email" autocomplete="email" inputmode="email" required />
         </div>
       </div>
 
       <div class="form-row">
         <div class="field">
-          <label>Phone Number</label>
-          <input type="tel" name="phone" placeholder="+977 98XXXXXXXX" />
+          <label for="f-phone">Phone <span class="optional">optional</span></label>
+          <input id="f-phone" type="tel" name="phone" autocomplete="tel" inputmode="tel" />
         </div>
         <div class="field">
-          <label>Subject <span>*</span></label>
-          <input type="text" name="subject" placeholder="Project Inquiry" required />
+          <label for="f-type">What is it about</label>
+          <select id="f-type" name="subject">
+            <option>A new website</option>
+            <option>An existing website</option>
+            <option>An Android app</option>
+            <option>Social media or video content</option>
+            <option>A job or contract role</option>
+            <option>Something else</option>
+          </select>
         </div>
       </div>
 
-      <div class="field full">
-        <label>Message <span>*</span></label>
-        <textarea name="message" rows="6" placeholder="Tell me about your project..." required></textarea>
+      <div class="field">
+        <label for="f-message">Message</label>
+        <textarea id="f-message" name="message" rows="6" required></textarea>
       </div>
 
-      <div id="form-msg" class="form-msg"></div>
+      <!-- Honeypot: hidden from people, filled by bots, checked by Web3Forms -->
+      <input type="checkbox" name="botcheck" class="visually-hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
-      <button type="submit" class="btn-solid submit-btn" id="submit-btn">
-        <span class="btn-txt">Send Message</span>
-        <i class="bx bx-send"></i>
-      </button>
+      <div class="form-foot">
+        <button type="submit" class="btn btn-primary" id="submit-btn">
+          <span class="btn-txt">Send message</span>
+          <Icon name="send" class="btn-ico" />
+        </button>
+        <p class="form-msg" id="form-msg" role="status" aria-live="polite"></p>
+      </div>
     </form>
   </div>
 </section>
 
 <style>
-.contact { padding-top: 9rem; padding-bottom: 9rem; position: relative; }
-
-.contact-wrap {
-  display: grid; grid-template-columns: 1fr 1.3fr;
-  gap: 6rem; align-items: start;
+.contact-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: start;
 }
 
-.contact-info h2 {
-  font-family: var(--fhead);
-  font-size: clamp(2.8rem, 3.5vw, 4rem);
-  font-weight: 700; line-height: 1.15; margin-bottom: 1.6rem;
-}
-.contact-info > p { color: var(--muted); font-size: 1.55rem; margin-bottom: 2.8rem; line-height: 1.7; }
+.contact-info .section-head { margin-bottom: 2rem; }
 
-.info-list {
-  list-style: none; display: flex; flex-direction: column;
-  gap: 1.4rem; margin-bottom: 3rem;
+.contact-list { display: grid; gap: 1.125rem; }
+.contact-list li { display: flex; align-items: flex-start; gap: .875rem; }
+.contact-ico {
+  flex: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.5rem; height: 2.5rem; border-radius: 999px;
+  background: var(--surface); border: 1px solid var(--line);
+  color: var(--accent-text);
 }
-.info-list li {
-  display: flex; align-items: center; gap: 1.2rem;
-  font-size: 1.45rem; color: var(--muted);
+.contact-ico svg { width: 1.125rem; height: 1.125rem; }
+.contact-label { display: block; font-size: .8125rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-3); margin-bottom: .15rem; }
+.contact-list a { font-weight: 500; color: var(--text); }
+.contact-list a:hover { color: var(--accent-text); }
+
+.contact-socials { display: flex; flex-wrap: wrap; gap: .25rem; margin-top: 1.5rem; margin-left: -.875rem; }
+
+.contact-ai {
+  margin-top: 2rem; padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
 }
-.info-list li i { color: var(--yellow); font-size: 1.9rem; flex-shrink: 0; }
-.info-list li a { color: inherit; text-decoration: none; transition: color .3s; }
-.info-list li a:hover { color: var(--yellow); }
+.contact-ai p { color: var(--text-2); font-size: .9625rem; }
+.contact-ai-btns { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }
 
 /* Form */
 .contact-form {
-  padding: 3.6rem;
-  display: flex; flex-direction: column; gap: 1.8rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  display: grid; gap: 1.125rem;
 }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.8rem; }
-.field { display: flex; flex-direction: column; gap: .7rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.125rem; }
+.field { display: grid; gap: .4rem; }
+.field label { font-size: .9rem; font-weight: 600; color: var(--text); }
+.optional { font-weight: 400; color: var(--text-3); }
 
-.field label {
-  font-size: 1.2rem; font-weight: 500; color: var(--muted);
-  text-transform: uppercase; letter-spacing: .06em;
+.field input, .field textarea, .field select {
+  width: 100%;
+  padding: .75rem .875rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--line-strong);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 1rem;
+  transition: border-color .18s, box-shadow .18s;
 }
-.field label span { color: var(--yellow); }
+.field textarea { resize: vertical; min-height: 8rem; }
+.field select { appearance: none; -webkit-appearance: none; padding-right: 2.5rem;
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: calc(100% - 1.15rem) 55%, calc(100% - .8rem) 55%;
+  background-size: .35rem .35rem, .35rem .35rem;
+  background-repeat: no-repeat;
+}
+.field input:focus, .field textarea:focus, .field select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.field input[aria-invalid="true"], .field textarea[aria-invalid="true"] { border-color: var(--err); }
 
-.field input, .field textarea {
-  background: rgba(7,9,15,.6);
-  border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 1.3rem 1.5rem;
-  font-family: var(--fbody); font-size: 1.5rem; color: var(--text);
-  transition: border-color .3s, box-shadow .3s;
-  resize: none; cursor: text;
-}
-.field input::placeholder, .field textarea::placeholder { color: var(--muted); }
-.field input:focus, .field textarea:focus {
-  border-color: rgba(232,255,72,.4);
-  box-shadow: 0 0 0 3px rgba(232,255,72,.06);
-}
+.form-foot { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.form-msg { font-size: .9375rem; min-height: 1.4em; }
+.form-msg.is-ok  { color: var(--ok); }
+.form-msg.is-err { color: var(--err); }
 
-.form-msg {
-  font-size: 1.4rem; border-radius: var(--radius);
-  max-height: 0; overflow: hidden;
-  transition: max-height .3s, padding .3s;
-}
-.form-msg.show { max-height: 70px; padding: 1.1rem 1.4rem; }
-.form-msg.ok  { background: rgba(34,197,94,.1); color: #4ade80; border: 1px solid rgba(34,197,94,.2); }
-.form-msg.err { background: rgba(239,68,68,.1); color: #f87171; border: 1px solid rgba(239,68,68,.2); }
+#submit-btn[disabled] { opacity: .7; cursor: progress; }
+#submit-btn .btn-ico { transition: transform .2s var(--ease-out); }
+#submit-btn:hover .btn-ico { transform: translate(2px, -2px); }
+#submit-btn.is-busy .btn-ico { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-/* Alternative entry points to the AI assistant (see AiAgent.astro).
-   "Talk to my AI" opens the panel straight into its voice surface. */
-/* Tighten the intro's gap when the CTAs follow it */
-.contact-info > p:has(+ .ai-cta-row) { margin-bottom: 1.6rem; }
-.ai-cta-row {
-  display: flex; flex-wrap: wrap; gap: 1rem;
-  margin-bottom: 2.8rem;
+@media (max-width: 900px) {
+  .contact-grid { grid-template-columns: 1fr; }
 }
-.ai-cta {
-  font-size: 1.4rem;
-  padding: 1rem 2rem;
-}
-.ai-cta i { font-size: 1.8rem; color: var(--yellow); }
-
-.submit-btn { align-self: flex-start; }
-.submit-btn i { font-size: 1.7rem; }
-
-@media (max-width: 1100px) {
-  .contact-wrap { grid-template-columns: 1fr; gap: 4rem; }
-}
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .form-row { grid-template-columns: 1fr; }
-  .contact-form { padding: 2.4rem; }
 }
 </style>
