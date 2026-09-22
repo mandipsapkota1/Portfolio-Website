@@ -126,6 +126,22 @@ which is connected to this GitHub repo and builds itself on every push:
 
 So **pushing to `main` is the deploy.** Nothing needs to be run by hand.
 
+**Do not push other branches expecting a preview.** The Worker's *Version
+command* (the command Cloudflare runs for non production branches) is set to
+`npx wrangler deploy`, the same as the production deploy command, so a push
+to any branch also replaces the live site. Worse, those non production builds
+run **without the build variables**, so the site goes live with no assistant
+at all. That is exactly what happened on 2026-09-22: a push to
+`feat/ai-assistant` deployed a keyless build and the assistant vanished until
+`main` was pushed and rebuilt. Two ways to make this safe, both in the
+dashboard under Settings, Builds:
+
+- change the Version command to `npx wrangler versions upload`, which uploads
+  a preview version without activating it, or
+- untick "Builds for non-production branches".
+
+Until one of those is done, treat every branch push as a production deploy.
+
 **The edge can serve stale HTML after a deploy.** A successful build does not
 guarantee the new page is being served: `index.html` has come back
 `cf-cache-status: HIT` with the previous build, and a cache busting query
